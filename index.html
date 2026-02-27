@@ -53,6 +53,127 @@
             </button>
             <h1>Choose Your Deck</h1>
         </header>
+        
+        <!-- Game Mode Selection -->
+        <div class="game-mode-selector">
+            <h3>Choose Your Game Mode 🎲</h3>
+            <div class="game-modes-grid">
+                <div class="mode-card" onclick="setGameMode('classic')">
+                    <div class="mode-icon">
+                        <i class="fas fa-play-circle"></i>
+                    </div>
+                    <h4>Classic Mode</h4>
+                    <p>Draw cards one by one, simple and relaxed</p>
+                </div>
+                <div class="mode-card" onclick="setGameMode('party')">
+                    <div class="mode-icon">
+                        <i class="fas fa-party-horn"></i>
+                    </div>
+                    <h4>Party Mode</h4>
+                    <p>Faster pace, more dares, more group actions</p>
+                </div>
+                <div class="mode-card" onclick="setGameMode('deep')">
+                    <div class="mode-icon">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <h4>Deep Mode</h4>
+                    <p>Focus on emotional and thoughtful cards</p>
+                </div>
+                <div class="mode-card" onclick="setGameMode('couple')">
+                    <div class="mode-icon">
+                        <i class="fas fa-heart"></i>
+                    </div>
+                    <h4>Couple Mode</h4>
+                    <p>Intimate, slow-paced, designed for two</p>
+                </div>
+                <div class="mode-card" onclick="setGameMode('family')">
+                    <div class="mode-icon">
+                        <i class="fas fa-home"></i>
+                    </div>
+                    <h4>Family Mode</h4>
+                    <p>Safe, fun, kid-friendly prompts</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Connection Tests Section -->
+        <div class="connection-tests-section">
+            <h3>Personality & Connection Tests 🧠</h3>
+            <div class="tests-grid">
+                <div class="test-card" onclick="startConnectionTest('fall-in-love-25')">
+                    <div class="test-icon">
+                        <i class="fas fa-heart"></i>
+                    </div>
+                    <h4>Fall in Love in 25 Questions</h4>
+                    <p>A shorter version of the famous intimacy test</p>
+                </div>
+                <div class="test-card" onclick="startConnectionTest('friendship-compatibility')">
+                    <div class="test-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h4>Friendship Compatibility Test</h4>
+                    <p>Discover how well you match as friends</p>
+                </div>
+                <div class="test-card" onclick="startConnectionTest('family-bonding')">
+                    <div class="test-icon">
+                        <i class="fas fa-home"></i>
+                    </div>
+                    <h4>Family Bonding Quiz</h4>
+                    <p>Strengthen family connections</p>
+                </div>
+                <div class="test-card" onclick="startConnectionTest('know-me-challenge')">
+                    <div class="test-icon">
+                        <i class="fas fa-question-circle"></i>
+                    </div>
+                    <h4>How Well Do You Know Me?</h4>
+                    <p>Test how well friends know each other</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mini Games Section -->
+        <div class="mini-games-section">
+            <h3>Mini Games 🎤</h3>
+            <div class="mini-games-grid">
+                <div class="mini-game-card" onclick="startMiniGame('story-builder')">
+                    <div class="mini-game-icon">
+                        <i class="fas fa-book"></i>
+                    </div>
+                    <h4>Story Builder</h4>
+                    <p>Each player adds one sentence to create a story</p>
+                </div>
+                <div class="mini-game-card" onclick="startMiniGame('guess-player')">
+                    <div class="mini-game-icon">
+                        <i class="fas fa-user-question"></i>
+                    </div>
+                    <h4>Guess the Player</h4>
+                    <p>A trait is revealed, guess who it fits</p>
+                </div>
+                <div class="mini-game-card" onclick="startMiniGame('memory-match')">
+                    <div class="mini-game-icon">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <h4>Memory Match</h4>
+                    <p>Recall details shared earlier in the game</p>
+                </div>
+                <div class="mini-game-card" onclick="startMiniGame('photo-challenge')">
+                    <div class="mini-game-icon">
+                        <i class="fas fa-camera"></i>
+                    </div>
+                    <h4>Photo Challenge</h4>
+                    <p>Take photos based on prompts</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Custom Deck Builder -->
+        <div class="custom-deck-section">
+            <h3>Create Your Own Deck 🃏</h3>
+            <button class="create-deck-btn" onclick="openDeckBuilder()">
+                <i class="fas fa-plus"></i> Create Custom Deck
+            </button>
+        </div>
+        
         <main class="deck-selection">
             <div class="container">
                 <div class="decks-grid">

@@ -15,6 +15,7 @@ let gameState = {
     currentCategory: 'all',
     difficulty: 'all',
     soundEnabled: true,
+    gameMode: 'classic', // New: Game modes
     stats: {
         cardsDrawn: 0,
         cardsSaved: 0,
@@ -28,10 +29,226 @@ let gameState = {
         player2Answers: [],
         currentQuestion: 0,
         currentPlayer: 1
+    },
+    miniGame: {
+        isActive: false,
+        type: null,
+        data: {}
+    },
+    customDecks: [], // User-created decks
+    currentTest: null // Personality/Connection tests
+};
+
+// Game Modes Configuration
+const gameModes = {
+    classic: {
+        name: "Classic Mode",
+        description: "Draw cards one by one, simple and relaxed",
+        icon: "play-circle",
+        settings: {
+            timerEnabled: false,
+            fastPace: false,
+            emotionalFilter: false,
+            kidFriendly: false
+        }
+    },
+    party: {
+        name: "Party Mode",
+        description: "Faster pace, more dares, more group actions",
+        icon: "party-horn",
+        settings: {
+            timerEnabled: true,
+            timerDuration: 30,
+            fastPace: true,
+            emotionalFilter: true,
+            kidFriendly: false
+        }
+    },
+    deep: {
+        name: "Deep Mode",
+        description: "Focus on emotional and thoughtful cards",
+        icon: "brain",
+        settings: {
+            timerEnabled: false,
+            fastPace: false,
+            emotionalFilter: true,
+            kidFriendly: false,
+            onlyDeep: true
+        }
+    },
+    couple: {
+        name: "Couple Mode",
+        description: "Intimate, slow-paced, designed for two",
+        icon: "heart",
+        settings: {
+            timerEnabled: false,
+            fastPace: false,
+            emotionalFilter: false,
+            kidFriendly: false,
+            twoPlayers: true
+        }
+    },
+    family: {
+        name: "Family Mode",
+        description: "Safe, fun, kid-friendly prompts",
+        icon: "home",
+        settings: {
+            timerEnabled: false,
+            fastPace: false,
+            emotionalFilter: true,
+            kidFriendly: true
+        }
     }
 };
 
-// Card Decks Data
+// Personality & Connection Tests
+const connectionTests = {
+    'fall-in-love-25': {
+        name: "Fall in Love in 25 Questions",
+        description: "A shorter version of the famous intimacy test",
+        icon: "heart",
+        type: "compatibility",
+        questions: [
+            "What's your idea of a perfect day together?",
+            "What's something you're proud of about yourself?",
+            "What does friendship mean to you?",
+            "What's your favorite way to show affection?",
+            "What's a goal you're working towards right now?",
+            "What's the best advice you've ever received?",
+            "What makes you feel most alive?",
+            "What's something you'd like to learn?",
+            "What's your favorite memory with family?",
+            "What's your biggest fear?",
+            "What makes you laugh the most?",
+            "What's your dream travel destination?",
+            "What's your favorite way to relax?",
+            "What's something you're grateful for today?",
+            "What's your favorite season and why?",
+            "What's your hidden talent?",
+            "What's your favorite book/movie and why?",
+            "What's your perfect weekend like?",
+            "What's your love language?",
+            "What's your biggest dream?",
+            "What's your favorite food memory?",
+            "What's your proudest achievement?",
+            "What's your favorite way to help others?",
+            "What's your ideal future like?",
+            "What's your favorite thing about yourself?"
+        ]
+    },
+    'friendship-compatibility': {
+        name: "Friendship Compatibility Test",
+        description: "Discover how well you match as friends",
+        icon: "users",
+        type: "friendship",
+        questions: [
+            "How do you prefer to spend time with friends?",
+            "What's your communication style in friendships?",
+            "How important is personal space to you?",
+            "What's your conflict resolution style?",
+            "How do you show support to friends?",
+            "What's your ideal friend group size?",
+            "How often do you like to hang out with friends?",
+            "What's your favorite group activity?",
+            "How do you handle friend disagreements?",
+            "What's your loyalty level in friendships?",
+            "How do you make new friends?",
+            "What's your favorite thing about your best friend?",
+            "How do you maintain long-distance friendships?",
+            "What's your friendship boundary style?",
+            "How do you celebrate friends' successes?",
+            "What's your comfort level with emotional sharing?",
+            "How do you handle friend cancellations?",
+            "What's your favorite friend tradition?",
+            "How do you support friends through tough times?",
+            "What's your friendship pet peeve?"
+        ]
+    },
+    'family-bonding': {
+        name: "Family Bonding Quiz",
+        description: "Strengthen family connections",
+        icon: "home",
+        type: "family",
+        questions: [
+            "What's your favorite family tradition?",
+            "How do you show love to family members?",
+            "What's your favorite family memory?",
+            "How do you handle family disagreements?",
+            "What's your role in the family?",
+            "What's your favorite family meal?",
+            "How do you celebrate family achievements?",
+            "What's your family communication style?",
+            "How do you support family members?",
+            "What's your favorite family vacation?",
+            "How do you maintain family connections?",
+            "What's your family's unique quality?",
+            "How do you handle family stress?",
+            "What's your favorite family story?",
+            "How do you show appreciation to family?",
+            "What's your family's strength?",
+            "How do you resolve family conflicts?",
+            "What's your favorite family activity?",
+            "How do you express gratitude to family?",
+            "What makes your family special?"
+        ]
+    },
+    'know-me-challenge': {
+        name: "How Well Do You Know Me?",
+        description: "Test how well friends know each other",
+        icon: "question-circle",
+        type: "knowledge",
+        questions: [
+            "What's my biggest fear?",
+            "What's my dream job?",
+            "What's my favorite childhood memory?",
+            "What's my biggest pet peeve?",
+            "What's my hidden talent?",
+            "What's my favorite food?",
+            "What's my biggest goal?",
+            "What's my favorite movie?",
+            "What's my most embarrassing moment?",
+            "What's my favorite season?",
+            "What's my biggest achievement?",
+            "What's my favorite hobby?",
+            "What's my favorite song?",
+            "What's my biggest weakness?",
+            "What's my favorite book?",
+            "What's my dream travel destination?",
+            "What's my favorite color?",
+            "What's my biggest strength?",
+            "What's my favorite animal?",
+            "What's my perfect day?"
+        ]
+    }
+};
+
+// Mini Games
+const miniGames = {
+    'story-builder': {
+        name: "Story Builder",
+        description: "Each player adds one sentence to create a story",
+        icon: "book",
+        minPlayers: 2
+    },
+    'guess-player': {
+        name: "Guess the Player",
+        description: "A trait is revealed, guess who it fits",
+        icon: "user-question",
+        minPlayers: 3
+    },
+    'memory-match': {
+        name: "Memory Match",
+        description: "Recall details shared earlier in the game",
+        icon: "brain",
+        minPlayers: 2
+    },
+    'photo-challenge': {
+        name: "Photo Challenge",
+        description: "Take photos based on prompts",
+        icon: "camera",
+        minPlayers: 1
+    }
+};
 const cardDecks = {
     conversation: {
         name: "Conversation Starters",
@@ -587,7 +804,360 @@ function showGamePlay() {
     showPage('gamePlayPage');
 }
 
-// Couples Mode Functions
+// Game Mode Functions
+function setGameMode(mode) {
+    gameState.gameMode = mode;
+    
+    // Update UI to show selected mode
+    document.querySelectorAll('.mode-card').forEach(card => {
+        card.classList.remove('selected');
+    });
+    event.currentTarget.classList.add('selected');
+    
+    // Apply mode settings
+    const modeSettings = gameModes[mode].settings;
+    
+    // Filter cards based on mode
+    if (modeSettings.kidFriendly) {
+        filterKidFriendlyCards();
+    }
+    if (modeSettings.onlyDeep) {
+        filterDeepCards();
+    }
+    if (modeSettings.fastPace) {
+        enableFastPace();
+    }
+    if (modeSettings.timerEnabled) {
+        enableTimer(modeSettings.timerDuration);
+    }
+    
+    playSound('favorite');
+    showNotification(`Game mode set to: ${gameModes[mode].name}`);
+}
+
+// Connection Test Functions
+function startConnectionTest(testId) {
+    const test = connectionTests[testId];
+    gameState.currentTest = testId;
+    
+    // Create test questions deck
+    const testDeck = {
+        name: test.name,
+        icon: test.icon,
+        cards: [...test.questions]
+    };
+    
+    gameState.currentDeck = 'test';
+    gameState.shuffledDeck = [...testDeck.cards];
+    shuffleArray(gameState.shuffledDeck);
+    gameState.currentCardIndex = 0;
+    
+    document.getElementById('currentDeckName').textContent = testDeck.name;
+    updateCardCounter();
+    showGamePlay();
+    
+    // Show test instructions
+    showTestInstructions(test);
+    playSound('favorite');
+}
+
+function showTestInstructions(test) {
+    const instructions = `
+        <div style="text-align: center; padding: 20px; background: rgba(78, 205, 196, 0.1); border-radius: 12px; margin-bottom: 20px;">
+            <h4 style="color: var(--secondary-color); margin-bottom: 15px;">${test.name}</h4>
+            <p style="margin-bottom: 15px;">${test.description}</p>
+            <p style="margin-bottom: 10px;"><strong>Instructions:</strong></p>
+            <ol style="text-align: left; max-width: 400px; margin: 0 auto;">
+                <li>Take turns asking and answering each question</li>
+                <li>Be honest and open with your responses</li>
+                <li>Listen actively to your partner's answers</li>
+                <li>Progress through all questions in order</li>
+                <li>Enjoy discovering more about each other!</li>
+            </ol>
+            <p style="margin-top: 15px; font-style: italic; color: #666;">Click "Draw Card" to begin your test!</p>
+        </div>
+    `;
+    
+    document.getElementById('cardText').innerHTML = instructions;
+}
+
+// Mini Game Functions
+function startMiniGame(gameType) {
+    const game = miniGames[gameType];
+    gameState.miniGame.isActive = true;
+    gameState.miniGame.type = gameType;
+    gameState.miniGame.data = {};
+    
+    // Initialize mini game based on type
+    switch(gameType) {
+        case 'story-builder':
+            initStoryBuilder();
+            break;
+        case 'guess-player':
+            initGuessPlayer();
+            break;
+        case 'memory-match':
+            initMemoryMatch();
+            break;
+        case 'photo-challenge':
+            initPhotoChallenge();
+            break;
+    }
+    
+    showMiniGameInterface(game);
+    playSound('favorite');
+}
+
+function initStoryBuilder() {
+    gameState.miniGame.data.story = [];
+    gameState.miniGame.data.currentPlayer = 1;
+    gameState.miniGame.data.players = [];
+}
+
+function initGuessPlayer() {
+    gameState.miniGame.data.currentRound = 1;
+    gameState.miniGame.data.scores = {};
+}
+
+function initMemoryMatch() {
+    gameState.miniGame.data.sharedDetails = [];
+    gameState.miniGame.data.currentRound = 1;
+}
+
+function initPhotoChallenge() {
+    gameState.miniGame.data.currentChallenge = 0;
+    gameState.miniGame.data.photos = [];
+}
+
+function showMiniGameInterface(game) {
+    const interface = `
+        <div class="mini-game-interface">
+            <h3>${game.name}</h3>
+            <p>${game.description}</p>
+            <div class="mini-game-content" id="miniGameContent">
+                <!-- Game content will be inserted here -->
+            </div>
+            <div class="mini-game-controls">
+                <button onclick="exitMiniGame()" class="control-button secondary">
+                    <i class="fas fa-times"></i> Exit Game
+                </button>
+            </div>
+        </div>
+    `;
+    
+    document.getElementById('cardText').innerHTML = interface;
+    
+    // Initialize specific game content
+    switch(gameState.miniGame.type) {
+        case 'story-builder':
+            showStoryBuilderContent();
+            break;
+        case 'guess-player':
+            showGuessPlayerContent();
+            break;
+        case 'memory-match':
+            showMemoryMatchContent();
+            break;
+        case 'photo-challenge':
+            showPhotoChallengeContent();
+            break;
+    }
+}
+
+function showStoryBuilderContent() {
+    const content = `
+        <div class="story-builder-game">
+            <div class="story-display" id="storyDisplay">
+                <p>Your story will begin here...</p>
+            </div>
+            <div class="player-input">
+                <p>Player ${gameState.miniGame.data.currentPlayer}, add one sentence to continue the story:</p>
+                <input type="text" id="storyInput" placeholder="Enter your sentence..." />
+                <button onclick="addStorySentence()" class="control-button primary">
+                    <i class="fas fa-plus"></i> Add Sentence
+                </button>
+            </div>
+        </div>
+    `;
+    
+    document.getElementById('miniGameContent').innerHTML = content;
+}
+
+function addStorySentence() {
+    const input = document.getElementById('storyInput');
+    const sentence = input.value.trim();
+    
+    if (sentence) {
+        gameState.miniGame.data.story.push({
+            player: gameState.miniGame.data.currentPlayer,
+            text: sentence
+        });
+        
+        updateStoryDisplay();
+        input.value = '';
+        
+        // Move to next player
+        gameState.miniGame.data.currentPlayer = 
+            gameState.miniGame.data.currentPlayer === 1 ? 2 : 1;
+        
+        // Update player indicator
+        document.querySelector('.player-input p').textContent = 
+            `Player ${gameState.miniGame.data.currentPlayer}, add one sentence to continue the story:`;
+        
+        playSound('draw');
+    }
+}
+
+function updateStoryDisplay() {
+    const storyDisplay = document.getElementById('storyDisplay');
+    const storyText = gameState.miniGame.data.story
+        .map(item => `${item.text}`)
+        .join(' ');
+    
+    storyDisplay.innerHTML = `<p><strong>Story so far:</strong> ${storyText}</p>`;
+}
+
+// Custom Deck Builder Functions
+function openDeckBuilder() {
+    showDeckBuilderInterface();
+}
+
+function showDeckBuilderInterface() {
+    const interface = `
+        <div class="deck-builder">
+            <h3>Create Your Custom Deck</h3>
+            <div class="deck-builder-form">
+                <div class="form-group">
+                    <label>Deck Name:</label>
+                    <input type="text" id="deckName" placeholder="Enter deck name..." />
+                </div>
+                <div class="form-group">
+                    <label>Deck Description:</label>
+                    <input type="text" id="deckDescription" placeholder="Describe your deck..." />
+                </div>
+                <div class="form-group">
+                    <label>Deck Icon:</label>
+                    <select id="deckIcon">
+                        <option value="star">⭐ Star</option>
+                        <option value="heart">❤️ Heart</option>
+                        <option value="rocket">🚀 Rocket</option>
+                        <option value="music">🎵 Music</option>
+                        <option value="camera">📷 Camera</option>
+                        <option value="gamepad">🎮 Gamepad</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Cards (one per line):</label>
+                    <textarea id="deckCards" rows="10" placeholder="Enter your cards, one per line..."></textarea>
+                </div>
+                <div class="deck-builder-actions">
+                    <button onclick="saveCustomDeck()" class="control-button primary">
+                        <i class="fas fa-save"></i> Save Deck
+                    </button>
+                    <button onclick="cancelDeckBuilder()" class="control-button secondary">
+                        <i class="fas fa-times"></i> Cancel
+                    </button>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    document.getElementById('cardText').innerHTML = interface;
+}
+
+function saveCustomDeck() {
+    const name = document.getElementById('deckName').value.trim();
+    const description = document.getElementById('deckDescription').value.trim();
+    const icon = document.getElementById('deckIcon').value;
+    const cardsText = document.getElementById('deckCards').value.trim();
+    
+    if (!name || !cardsText) {
+        showNotification('Please fill in deck name and at least one card!');
+        return;
+    }
+    
+    const cards = cardsText.split('\n').filter(card => card.trim());
+    
+    const customDeck = {
+        id: 'custom-' + Date.now(),
+        name: name,
+        description: description,
+        icon: icon,
+        cards: cards,
+        isCustom: true,
+        createdAt: new Date().toISOString()
+    };
+    
+    gameState.customDecks.push(customDeck);
+    saveGameState();
+    
+    // Add to card decks
+    cardDecks[customDeck.id] = {
+        name: customDeck.name,
+        icon: customDeck.icon,
+        cards: customDeck.cards
+    };
+    
+    showNotification(`Custom deck "${name}" created successfully!`);
+    showDeckSelection();
+    playSound('favorite');
+}
+
+function cancelDeckBuilder() {
+    showDeckSelection();
+}
+
+function exitMiniGame() {
+    gameState.miniGame.isActive = false;
+    gameState.miniGame.type = null;
+    gameState.miniGame.data = {};
+    showDeckSelection();
+}
+
+// Helper Functions
+function filterKidFriendlyCards() {
+    // Implementation for filtering kid-friendly cards
+    console.log('Filtering kid-friendly cards');
+}
+
+function filterDeepCards() {
+    // Implementation for filtering deep questions only
+    console.log('Filtering deep cards');
+}
+
+function enableFastPace() {
+    // Implementation for fast pace mode
+    console.log('Enabling fast pace mode');
+}
+
+function enableTimer(duration) {
+    // Implementation for timer
+    console.log(`Enabling timer: ${duration} seconds`);
+}
+
+function showNotification(message) {
+    // Create a simple notification
+    const notification = document.createElement('div');
+    notification.className = 'notification';
+    notification.textContent = message;
+    notification.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: var(--primary-color);
+        color: white;
+        padding: 15px 20px;
+        border-radius: 8px;
+        z-index: 1000;
+        animation: slideIn 0.3s ease;
+    `;
+    
+    document.body.appendChild(notification);
+    
+    setTimeout(() => {
+        notification.remove();
+    }, 3000);
+}
 function selectDeck(deckType) {
     if (deckType === 'fall-in-love') {
         gameState.couplesMode.isActive = true;
