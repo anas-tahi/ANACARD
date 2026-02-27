@@ -808,6 +808,9 @@ function showGamePlay() {
 function setGameMode(mode) {
     gameState.gameMode = mode;
     
+    // Apply theme to body
+    document.body.setAttribute('data-theme', mode);
+    
     // Update UI to show selected mode
     document.querySelectorAll('.mode-card').forEach(card => {
         card.classList.remove('selected');
@@ -833,6 +836,9 @@ function setGameMode(mode) {
     
     playSound('favorite');
     showNotification(`Game mode set to: ${gameModes[mode].name}`);
+    
+    // Save theme preference
+    saveGameState();
 }
 
 // Connection Test Functions
@@ -1834,21 +1840,24 @@ function saveGameState() {
 }
 
 function loadGameState() {
-    const saved = localStorage.getItem('anacard_gameState');
+    const saved = localStorage.getItem('anacard-game-state');
     if (saved) {
-        const loadedState = JSON.parse(saved);
-        Object.assign(gameState, loadedState);
+        const parsed = JSON.parse(saved);
+        Object.assign(gameState, parsed);
         
-        // Apply loaded settings
-        if (gameState.darkMode) {
-            document.documentElement.setAttribute('data-theme', 'dark');
-            document.getElementById('themeIcon').className = 'fas fa-sun';
+        // Restore theme
+        if (gameState.gameMode && gameState.gameMode !== 'classic') {
+            document.body.setAttribute('data-theme', gameState.gameMode);
         }
         
+        // Restore dark mode
+        if (gameState.darkMode) {
+            document.body.setAttribute('data-theme', 'dark');
+        }
+        
+        // Update UI elements
+        updateStatsDisplay();
         updateFavoriteCount();
-        updateSavedCount();
-        document.getElementById('soundStatus').textContent = gameState.soundEnabled ? 'ON' : 'OFF';
-        document.getElementById('soundIcon').className = gameState.soundEnabled ? 'fas fa-volume-up' : 'fas fa-volume-mute';
     }
 }
 
