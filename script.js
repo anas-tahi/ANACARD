@@ -519,6 +519,49 @@ const cardDecks = {
                 ]
             }
         ]
+    },
+    '36-questions-love': {
+        name: "36 Questions to Love 💝",
+        icon: "heart",
+        type: "aron-questions",
+        cards: [
+            "Given the choice of anyone in the world, whom would you want as a dinner guest?",
+            "Would you like to be famous? In what way?",
+            "Before making a telephone call, do you ever rehearse what you're going to say? Why?",
+            "What would constitute a 'perfect' day for you?",
+            "When did you last sing to yourself? To someone else?",
+            "If you were able to live to the age of 90 and retain either the mind or body of a 30-year-old for the last 60 years of your life, which would you want?",
+            "Do you have a secret hunch about how you will die?",
+            "Name three things you and your partner appear to have in common.",
+            "For what in your life do you feel most grateful?",
+            "If you could change anything about the way you were raised, what would it be?",
+            "Take four minutes and tell your partner your life story in as much detail as possible.",
+            "If you could wake up tomorrow having gained any one quality or ability, what would it be?",
+            "If a crystal ball could tell you the truth about yourself, your life, the future or anything else, what would you want to know?",
+            "Is there something that you've dreamed of doing for a long time? Why haven't you done it?",
+            "What is the greatest accomplishment of your life?",
+            "What do you value most in a friendship?",
+            "What is your most treasured memory?",
+            "What is your most terrible memory?",
+            "If you knew that in one year you would die suddenly, would you change anything about the way you are now living? Why?",
+            "What does friendship mean to you?",
+            "What roles do love and affection play in your life?",
+            "Alternate sharing something you consider a positive characteristic of your partner. Share a total of five items.",
+            "How close and warm is your family? Do you feel your childhood was happier than most other people's?",
+            "How do you feel about your relationship with your mother?",
+            "Make three true 'we' statements each. For instance, 'We are both in this room feeling...'",
+            "Complete this sentence: 'I wish I had someone with whom I could share...'",
+            "If you were going to become a close friend with your partner, please share what would be important for them to know.",
+            "Tell your partner what you like about them; be very honest this time, saying things that you might not say to someone you've just met.",
+            "Share with your partner an embarrassing moment in your life.",
+            "When did you last cry in front of another person? By yourself?",
+            "Tell your partner something that you like about them already.",
+            "What, if anything, is too serious to be joked about?",
+            "If you were to die this evening with no opportunity to communicate with anyone, what would you most regret not having told someone? Why haven't you told them yet?",
+            "Your house, containing everything you own, catches fire. After saving your loved ones and pets, you have time to safely make a final dash to save any one item. What would it be? Why?",
+            "Of all the people in your family, whose death would you find most disturbing? Why?",
+            "Share a personal problem and ask your partner's advice on how he or she might handle it. Also, ask your partner to reflect back to you how you seem to be feeling about the problem you have chosen."
+        ]
     }
 };
 
@@ -551,6 +594,17 @@ function selectDeck(deckType) {
         gameState.currentDeck = deckType;
         showGamePlay();
         initializeCouplesMode();
+    } else if (deckType === '36-questions-love') {
+        gameState.couplesMode.isActive = false;
+        gameState.currentDeck = deckType;
+        gameState.shuffledDeck = [...cardDecks[deckType].cards];
+        shuffleArray(gameState.shuffledDeck);
+        gameState.currentCardIndex = 0;
+        
+        document.getElementById('currentDeckName').textContent = cardDecks[deckType].name;
+        updateCardCounter();
+        showGamePlay();
+        showAronInstructions();
     } else {
         gameState.couplesMode.isActive = false;
         gameState.currentDeck = deckType;
@@ -562,6 +616,27 @@ function selectDeck(deckType) {
         updateCardCounter();
         showGamePlay();
     }
+}
+
+function showAronInstructions() {
+    const instructions = `
+        <div style="text-align: center; padding: 20px; background: rgba(102, 126, 234, 0.1); border-radius: 12px; margin-bottom: 20px;">
+            <h4 style="color: #667eea; margin-bottom: 15px;">🧠 Arthur Aron's 36 Questions</h4>
+            <p style="margin-bottom: 10px;"><strong>Based on the 1997 scientific study on interpersonal closeness</strong></p>
+            <p style="margin-bottom: 10px;">These questions are designed to gradually increase vulnerability and create deep connection.</p>
+            <p style="margin-bottom: 10px;"><strong>Instructions:</strong></p>
+            <ol style="text-align: left; max-width: 400px; margin: 0 auto;">
+                <li>Take turns asking and answering each question</li>
+                <li>Be honest and open with your responses</li>
+                <li>Listen actively to your partner's answers</li>
+                <li>Progress through all 36 questions in order</li>
+                <li>End with 4 minutes of silent eye contact</li>
+            </ol>
+            <p style="margin-top: 15px; font-style: italic; color: #666;">"The more vulnerable you are, the closer you'll become."</p>
+        </div>
+    `;
+    
+    document.getElementById('cardText').innerHTML = instructions;
 }
 
 function initializeCouplesMode() {
