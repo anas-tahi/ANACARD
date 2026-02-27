@@ -6,10 +6,22 @@ let gameState = {
     currentCardIndex: 0,
     shuffledDeck: [],
     savedCards: [],
+    favoriteCards: [],
     everyoneAnswersMode: false,
     hostMode: false,
     timerInterval: null,
-    timerSeconds: 0
+    timerSeconds: 0,
+    darkMode: false,
+    currentCategory: 'all',
+    difficulty: 'all',
+    soundEnabled: true,
+    stats: {
+        cardsDrawn: 0,
+        cardsSaved: 0,
+        cardsFavorited: 0,
+        sessionsPlayed: 0,
+        totalTimeSpent: 0
+    }
 };
 
 // Card Decks Data
@@ -252,6 +264,155 @@ const cardDecks = {
             "Pass the Emotion: Pass an expression around the circle",
             "Group Story: Create a story where each person adds one sentence",
             "Sound Circle: Each person makes a sound, group tries to recreate the sequence"
+        ]
+    },
+    'travel-adventure': {
+        name: "Travel & Adventure",
+        icon: "plane",
+        cards: [
+            "If you could teleport anywhere right now, where would you go?",
+            "What's the most adventurous thing you've ever done while traveling?",
+            "Describe your perfect travel companion",
+            "What's a travel experience that changed your perspective?",
+            "If you could live in any country for a year, where would it be?",
+            "What's the most beautiful place you've ever seen?",
+            "What's your favorite travel memory?",
+            "If you could have any travel superpower, what would it be?",
+            "What's a place you'd never visit again and why?",
+            "Describe your dream vacation in detail",
+            "What's the weirdest food you've tried while traveling?",
+            "If you could travel through time, where would you go?",
+            "What's the most important lesson you've learned from traveling?",
+            "Describe a moment when you felt truly lost while traveling",
+            "What's your favorite mode of transportation and why?",
+            "If you could create a new country, what would it be like?",
+            "What's the most hospitable place you've ever visited?",
+            "Describe your travel style in three words",
+            "What's a place that exceeded your expectations?",
+            "If you could speak any language fluently, which would you choose?",
+            "What's the most challenging travel experience you've had?",
+            "Describe your perfect travel day",
+            "What's a travel tradition you have?",
+            "If you could travel with any three people, who would they be?",
+            "What's the most breathtaking view you've ever witnessed?",
+            "Describe a time when travel made you feel brave",
+            "What's your favorite travel souvenir?",
+            "If you could relive any trip, which would it be?",
+            "What's a place that felt like coming home?",
+            "Describe your most unexpected travel discovery",
+            "What's the longest journey you've ever taken?",
+            "If you could create a travel app, what would it do?",
+            "What's a place that made you feel small in a good way?",
+            "Describe your favorite travel photograph memory",
+            "What's the most interesting person you've met while traveling?",
+            "If you could have any travel job, what would it be?",
+            "What's a travel mistake you've learned from?",
+            "Describe your perfect travel playlist",
+            "What's the most peaceful place you've ever visited?",
+            "If you could travel to any planet, where would you go?",
+            "What's a travel experience that made you laugh uncontrollably?",
+            "Describe your travel philosophy in one sentence"
+        ]
+    },
+    'creativity-imagination': {
+        name: "Creativity & Imagination",
+        icon: "palette",
+        cards: [
+            "If you could invent anything, what would it be?",
+            "Describe a color that doesn't exist",
+            "If you could talk to your younger self, what would you say?",
+            "Create a new holiday and describe how people celebrate it",
+            "If you could design a new animal, what would it look like?",
+            "Describe a world where gravity works differently",
+            "If you could write a book about your life, what would the title be?",
+            "Create a new flavor and describe it",
+            "If you could paint your emotions, what would they look like?",
+            "Describe a machine that solves an everyday problem",
+            "If you could compose a song, what would it be about?",
+            "Create a new type of weather and describe it",
+            "If you could design a dream house, what would it include?",
+            "Describe a world where everyone has a superpower",
+            "If you could create a new sport, what would the rules be?",
+            "Describe your imagination as a physical place",
+            "If you could invent a new sense, what would it be?",
+            "Create a new language and describe its purpose",
+            "If you could design a new planet, what would it be like?",
+            "Describe a day in the life of your future self",
+            "If you could create a new art form, what would it be?",
+            "Describe a world where music has colors",
+            "If you could write a letter to anyone, dead or alive, who would it be?",
+            "Create a new type of transportation and describe it",
+            "If you could design a perfect city, what would it include?",
+            "Describe a world where dreams can be shared",
+            "If you could create a new type of food, what would it taste like?",
+            "Describe your creative process as a journey",
+            "If you could invent a new game, how would it work?",
+            "Create a new type of plant and describe its properties",
+            "If you could design a new type of clothing, what would it do?",
+            "Describe a world where time moves differently",
+            "If you could create a new type of music, how would it sound?",
+            "Describe your ideal workspace for creativity",
+            "If you could invent a new type of communication, how would it work?",
+            "Create a new type of building and describe its purpose",
+            "If you could design a new type of education system, what would it be?",
+            "Describe a world where emotions have physical forms",
+            "If you could create a new type of entertainment, what would it be?",
+            "Describe your imagination as a garden"
+        ]
+    },
+    'mindfulness-wellness': {
+        name: "Mindfulness & Wellness",
+        icon: "spa",
+        cards: [
+            "What does self-care look like for you?",
+            "Describe your perfect moment of peace",
+            "What's a small thing that always grounds you?",
+            "If you could bottle a feeling, which would you choose?",
+            "What does your inner voice sound like when you're happy?",
+            "Describe a place where you feel completely yourself",
+            "What's a ritual that brings you comfort?",
+            "If you could design a meditation space, what would it include?",
+            "What does your breath feel like when you're calm?",
+            "Describe your favorite way to connect with nature",
+            "What's a thought that always makes you smile?",
+            "If you could create a wellness routine, what would it include?",
+            "Describe the feeling of sunshine on your skin",
+            "What's a sound that instantly relaxes you?",
+            "If you could design a perfect day for your mental health, what would it be?",
+            "Describe the taste of your favorite comfort food",
+            "What's a movement that makes you feel alive?",
+            "If you could create a self-care package, what would you include?",
+            "Describe the feeling of clean sheets",
+            "What's a scent that brings you peace?",
+            "If you could design a relaxation app, what features would it have?",
+            "Describe your ideal morning routine",
+            "What's a texture that comforts you?",
+            "If you could create a wellness journal, what prompts would it include?",
+            "Describe the feeling of a warm hug",
+            "What's a color that makes you feel calm?",
+            "If you could design a perfect evening routine, what would it include?",
+            "Describe the feeling of accomplishment",
+            "What's a taste that reminds you of home?",
+            "If you could create a mindfulness exercise, what would it be?",
+            "Describe the feeling of gratitude",
+            "What's a movement that expresses joy?",
+            "If you could design a perfect self-care day, what would it include?",
+            "Describe the feeling of being fully present",
+            "What's a sound that makes you feel safe?",
+            "If you could create a wellness challenge, what would it be?",
+            "Describe the feeling of letting go",
+            "What's a sensation that reminds you you're alive?",
+            "If you could design a perfect space for reflection, what would it include?",
+            "Describe the feeling of hope",
+            "What's a simple pleasure that never gets old?",
+            "If you could create a mantra for yourself, what would it be?",
+            "Describe the feeling of being truly rested",
+            "What's a moment that made you feel proud of yourself?",
+            "If you could design a perfect balance between work and life, what would it look like?",
+            "Describe the feeling of being understood",
+            "What's a small victory you're celebrating today?",
+            "If you could create a wellness community, what would it focus on?",
+            "Describe the feeling of being exactly where you need to be"
         ]
     }
 };
@@ -509,8 +670,283 @@ document.addEventListener('keydown', function(e) {
     }
 });
 
-// Initialize
+// New Enhanced Functions
+function toggleDarkMode() {
+    gameState.darkMode = !gameState.darkMode;
+    document.documentElement.setAttribute('data-theme', gameState.darkMode ? 'dark' : 'light');
+    
+    const icon = document.getElementById('themeIcon');
+    icon.className = gameState.darkMode ? 'fas fa-sun' : 'fas fa-moon';
+    
+    playSound('toggle');
+    saveGameState();
+}
+
+function toggleFavorite() {
+    const currentCardText = document.getElementById('cardText').textContent;
+    const favoriteIcon = document.getElementById('favoriteIcon');
+    
+    if (!currentCardText || currentCardText === 'Click "Draw Card" to start playing!') return;
+    
+    const existingIndex = gameState.favoriteCards.findIndex(card => card.text === currentCardText);
+    
+    if (existingIndex > -1) {
+        gameState.favoriteCards.splice(existingIndex, 1);
+        favoriteIcon.className = 'far fa-heart';
+    } else {
+        gameState.favoriteCards.push({
+            text: currentCardText,
+            deck: cardDecks[gameState.currentDeck].name,
+            timestamp: new Date().toLocaleString()
+        });
+        favoriteIcon.className = 'fas fa-heart';
+        gameState.stats.cardsFavorited++;
+    }
+    
+    updateFavoriteCount();
+    playSound('favorite');
+    saveGameState();
+}
+
+function rateCard() {
+    const currentCardText = document.getElementById('cardText').textContent;
+    const rateIcon = document.getElementById('rateIcon');
+    
+    if (!currentCardText || currentCardText === 'Click "Draw Card" to start playing!') return;
+    
+    // Simple rating toggle - could be expanded to 1-5 stars
+    rateIcon.classList.toggle('fas');
+    rateIcon.classList.toggle('far');
+    
+    playSound('rate');
+}
+
+function showFavoriteCards() {
+    const modal = document.getElementById('favoriteCardsModal');
+    const list = document.getElementById('favoriteCardsList');
+    
+    if (gameState.favoriteCards.length === 0) {
+        list.innerHTML = '<p class="empty-state">No favorite cards yet</p>';
+    } else {
+        list.innerHTML = gameState.favoriteCards.map((card, index) => `
+            <div class="saved-card-item">
+                <p>${card.text}</p>
+                <div class="saved-card-meta">
+                    ${card.deck} • ${card.timestamp}
+                </div>
+            </div>
+        `).join('');
+    }
+    
+    modal.classList.add('active');
+    toggleGameMenu();
+}
+
+function closeFavoriteCards() {
+    document.getElementById('favoriteCardsModal').classList.remove('active');
+}
+
+function showStats() {
+    const modal = document.getElementById('statsModal');
+    
+    // Update statistics
+    document.getElementById('totalCardsDrawn').textContent = gameState.stats.cardsDrawn;
+    document.getElementById('totalCardsSaved').textContent = gameState.stats.cardsSaved;
+    document.getElementById('totalCardsFavorited').textContent = gameState.stats.cardsFavorited;
+    document.getElementById('totalSessionsPlayed').textContent = gameState.stats.sessionsPlayed;
+    document.getElementById('totalTimeSpent').textContent = formatTime(gameState.stats.totalTimeSpent);
+    
+    // Find most played deck
+    const deckCounts = {};
+    for (const deckType in cardDecks) {
+        deckCounts[deckType] = parseInt(localStorage.getItem(`deck_${deckType}_played`) || '0');
+    }
+    const mostPlayed = Object.keys(deckCounts).reduce((a, b) => deckCounts[a] > deckCounts[b] ? a : b);
+    document.getElementById('mostPlayedDeck').textContent = deckCounts[mostPlayed] > 0 ? cardDecks[mostPlayed].name : '-';
+    
+    modal.classList.add('active');
+    toggleGameMenu();
+}
+
+function closeStats() {
+    document.getElementById('statsModal').classList.remove('active');
+}
+
+function toggleSound() {
+    gameState.soundEnabled = !gameState.soundEnabled;
+    document.getElementById('soundStatus').textContent = gameState.soundEnabled ? 'ON' : 'OFF';
+    document.getElementById('soundIcon').className = gameState.soundEnabled ? 'fas fa-volume-up' : 'fas fa-volume-mute';
+    saveGameState();
+}
+
+function playSound(type) {
+    if (!gameState.soundEnabled) return;
+    
+    // Create simple sound effects using Web Audio API
+    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    const oscillator = audioContext.createOscillator();
+    const gainNode = audioContext.createGain();
+    
+    oscillator.connect(gainNode);
+    gainNode.connect(audioContext.destination);
+    
+    switch(type) {
+        case 'draw':
+            oscillator.frequency.value = 523.25; // C5
+            gainNode.gain.value = 0.1;
+            break;
+        case 'shuffle':
+            oscillator.frequency.value = 659.25; // E5
+            gainNode.gain.value = 0.1;
+            break;
+        case 'save':
+            oscillator.frequency.value = 783.99; // G5
+            gainNode.gain.value = 0.1;
+            break;
+        case 'favorite':
+            oscillator.frequency.value = 880; // A5
+            gainNode.gain.value = 0.1;
+            break;
+        case 'rate':
+            oscillator.frequency.value = 987.77; // B5
+            gainNode.gain.value = 0.1;
+            break;
+        case 'toggle':
+            oscillator.frequency.value = 440; // A4
+            gainNode.gain.value = 0.05;
+            break;
+        default:
+            oscillator.frequency.value = 440;
+            gainNode.gain.value = 0.05;
+    }
+    
+    oscillator.start();
+    oscillator.stop(audioContext.currentTime + 0.1);
+}
+
+function updateFavoriteCount() {
+    document.getElementById('favoriteCount').textContent = gameState.favoriteCards.length;
+}
+
+function formatTime(seconds) {
+    if (seconds < 60) return `${seconds}s`;
+    if (seconds < 3600) return `${Math.floor(seconds / 60)}m`;
+    return `${Math.floor(seconds / 3600)}h ${Math.floor((seconds % 3600) / 60)}m`;
+}
+
+function saveGameState() {
+    localStorage.setItem('anacard_gameState', JSON.stringify(gameState));
+}
+
+function loadGameState() {
+    const saved = localStorage.getItem('anacard_gameState');
+    if (saved) {
+        const loadedState = JSON.parse(saved);
+        Object.assign(gameState, loadedState);
+        
+        // Apply loaded settings
+        if (gameState.darkMode) {
+            document.documentElement.setAttribute('data-theme', 'dark');
+            document.getElementById('themeIcon').className = 'fas fa-sun';
+        }
+        
+        updateFavoriteCount();
+        updateSavedCount();
+        document.getElementById('soundStatus').textContent = gameState.soundEnabled ? 'ON' : 'OFF';
+        document.getElementById('soundIcon').className = gameState.soundEnabled ? 'fas fa-volume-up' : 'fas fa-volume-mute';
+    }
+}
+
+function updateStats() {
+    gameState.stats.cardsDrawn++;
+    gameState.stats.sessionsPlayed = parseInt(localStorage.getItem('total_sessions') || '0') + 1;
+    localStorage.setItem('total_sessions', gameState.stats.sessionsPlayed);
+    
+    // Track deck usage
+    const deckKey = `deck_${gameState.currentDeck}_played`;
+    const currentCount = parseInt(localStorage.getItem(deckKey) || '0');
+    localStorage.setItem(deckKey, currentCount + 1);
+    
+    saveGameState();
+}
+
+// Enhanced existing functions
+function drawCard() {
+    if (gameState.currentCardIndex >= gameState.shuffledDeck.length) {
+        shuffleArray(gameState.shuffledDeck);
+        gameState.currentCardIndex = 0;
+    }
+    
+    const card = gameState.shuffledDeck[gameState.currentCardIndex];
+    displayCard(card);
+    gameState.currentCardIndex++;
+    updateCardCounter();
+    
+    // Update stats
+    updateStats();
+    
+    // Show timer for dare cards
+    if (gameState.currentDeck === 'dares') {
+        document.getElementById('timerSection').classList.remove('hidden');
+    } else {
+        document.getElementById('timerSection').classList.add('hidden');
+    }
+    
+    // Reset favorite icon
+    document.getElementById('favoriteIcon').className = 'far fa-heart';
+    
+    playSound('draw');
+}
+
+function saveCard() {
+    const currentCardText = document.getElementById('cardText').textContent;
+    if (currentCardText && !gameState.savedCards.includes(currentCardText)) {
+        gameState.savedCards.push({
+            text: currentCardText,
+            deck: cardDecks[gameState.currentDeck].name,
+            timestamp: new Date().toLocaleString()
+        });
+        updateSavedCount();
+        gameState.stats.cardsSaved++;
+        
+        // Visual feedback
+        const card = document.getElementById('currentCard');
+        card.style.animation = 'pulse 0.5s ease-in-out';
+        setTimeout(() => {
+            card.style.animation = '';
+        }, 500);
+        
+        playSound('save');
+        saveGameState();
+    }
+}
+
+function shuffleDeck() {
+    shuffleArray(gameState.shuffledDeck);
+    gameState.currentCardIndex = 0;
+    updateCardCounter();
+    
+    // Visual feedback
+    const card = document.getElementById('currentCard');
+    card.style.animation = 'pulse 0.5s ease-in-out';
+    setTimeout(() => {
+        card.style.animation = '';
+    }, 500);
+    
+    playSound('shuffle');
+}
+
+// Initialize on load
 document.addEventListener('DOMContentLoaded', function() {
+    loadGameState();
+    
+    // Start session timer
+    const sessionStart = Date.now();
+    setInterval(() => {
+        gameState.stats.totalTimeSpent = Math.floor((Date.now() - sessionStart) / 1000);
+        saveGameState();
+    }, 30000); // Update every 30 seconds
+    
     // Add smooth scrolling
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function (e) {

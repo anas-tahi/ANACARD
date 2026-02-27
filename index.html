@@ -110,6 +110,39 @@
                             <span><i class="fas fa-layer-group"></i> 30 cards</span>
                         </div>
                     </div>
+                    
+                    <div class="deck-card" onclick="selectDeck('travel-adventure')">
+                        <div class="deck-icon">
+                            <i class="fas fa-plane"></i>
+                        </div>
+                        <h3>Travel & Adventure</h3>
+                        <p>Explore the world through conversation</p>
+                        <div class="deck-stats">
+                            <span><i class="fas fa-layer-group"></i> 45 cards</span>
+                        </div>
+                    </div>
+                    
+                    <div class="deck-card" onclick="selectDeck('creativity-imagination')">
+                        <div class="deck-icon">
+                            <i class="fas fa-palette"></i>
+                        </div>
+                        <h3>Creativity & Imagination</h3>
+                        <p>Spark your creative thinking</p>
+                        <div class="deck-stats">
+                            <span><i class="fas fa-layer-group"></i> 40 cards</span>
+                        </div>
+                    </div>
+                    
+                    <div class="deck-card" onclick="selectDeck('mindfulness-wellness')">
+                        <div class="deck-icon">
+                            <i class="fas fa-spa"></i>
+                        </div>
+                        <h3>Mindfulness & Wellness</h3>
+                        <p>Nurture your mental health</p>
+                        <div class="deck-stats">
+                            <span><i class="fas fa-layer-group"></i> 50 cards</span>
+                        </div>
+                    </div>
                 </div>
             </div>
         </main>
@@ -128,6 +161,9 @@
             <button class="menu-button" onclick="toggleGameMenu()">
                 <i class="fas fa-ellipsis-v"></i>
             </button>
+            <button class="theme-toggle" onclick="toggleDarkMode()">
+                <i class="fas fa-moon" id="themeIcon"></i>
+            </button>
         </header>
 
         <!-- Game Menu -->
@@ -141,6 +177,15 @@
             <button onclick="showSavedCards()">
                 <i class="fas fa-bookmark"></i> Saved Cards (<span id="savedCount">0</span>)
             </button>
+            <button onclick="showFavoriteCards()">
+                <i class="fas fa-heart"></i> Favorites (<span id="favoriteCount">0</span>)
+            </button>
+            <button onclick="showStats()">
+                <i class="fas fa-chart-bar"></i> Statistics
+            </button>
+            <button onclick="toggleSound()">
+                <i class="fas fa-volume-up" id="soundIcon"></i> Sound: <span id="soundStatus">ON</span>
+            </button>
             <button onclick="resetDeck()">
                 <i class="fas fa-redo"></i> Reset Deck
             </button>
@@ -151,6 +196,14 @@
                 <div id="currentCard" class="card">
                     <div class="card-content">
                         <p id="cardText">Click "Draw Card" to start playing!</p>
+                    </div>
+                    <div class="card-actions">
+                        <button class="card-action-btn" onclick="toggleFavorite()" title="Add to Favorites">
+                            <i class="far fa-heart" id="favoriteIcon"></i>
+                        </button>
+                        <button class="card-action-btn" onclick="rateCard()" title="Rate this card">
+                            <i class="far fa-star" id="rateIcon"></i>
+                        </button>
                     </div>
                 </div>
             </div>
@@ -197,6 +250,69 @@
             <div class="modal-body">
                 <div id="savedCardsList" class="saved-cards-list">
                     <p class="empty-state">No saved cards yet</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Favorite Cards Modal -->
+    <div id="favoriteCardsModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Favorite Cards</h3>
+                <button class="close-button" onclick="closeFavoriteCards()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="favoriteCardsList" class="saved-cards-list">
+                    <p class="empty-state">No favorite cards yet</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Statistics Modal -->
+    <div id="statsModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Your Statistics</h3>
+                <button class="close-button" onclick="closeStats()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <i class="fas fa-layer-group"></i>
+                        <div class="stat-value" id="totalCardsDrawn">0</div>
+                        <div class="stat-label">Cards Drawn</div>
+                    </div>
+                    <div class="stat-item">
+                        <i class="fas fa-bookmark"></i>
+                        <div class="stat-value" id="totalCardsSaved">0</div>
+                        <div class="stat-label">Cards Saved</div>
+                    </div>
+                    <div class="stat-item">
+                        <i class="fas fa-heart"></i>
+                        <div class="stat-value" id="totalCardsFavorited">0</div>
+                        <div class="stat-label">Favorites</div>
+                    </div>
+                    <div class="stat-item">
+                        <i class="fas fa-gamepad"></i>
+                        <div class="stat-value" id="totalSessionsPlayed">0</div>
+                        <div class="stat-label">Sessions Played</div>
+                    </div>
+                    <div class="stat-item">
+                        <i class="fas fa-clock"></i>
+                        <div class="stat-value" id="totalTimeSpent">0m</div>
+                        <div class="stat-label">Time Spent</div>
+                    </div>
+                    <div class="stat-item">
+                        <i class="fas fa-trophy"></i>
+                        <div class="stat-value" id="mostPlayedDeck">-</div>
+                        <div class="stat-label">Favorite Deck</div>
+                    </div>
                 </div>
             </div>
         </div>
