@@ -21,6 +21,13 @@ let gameState = {
         cardsFavorited: 0,
         sessionsPlayed: 0,
         totalTimeSpent: 0
+    },
+    couplesMode: {
+        isActive: false,
+        player1Answers: [],
+        player2Answers: [],
+        currentQuestion: 0,
+        currentPlayer: 1
     }
 };
 
@@ -414,6 +421,104 @@ const cardDecks = {
             "If you could create a wellness community, what would it focus on?",
             "Describe the feeling of being exactly where you need to be"
         ]
+    },
+    'fall-in-love': {
+        name: "Fall in Love ❤️",
+        icon: "heart",
+        type: "compatibility",
+        questions: [
+            {
+                id: 1,
+                question: "What's your idea of a perfect date?",
+                options: [
+                    { text: "Cozy dinner at home", value: "homebody", points: { homebody: 3, adventurer: 1, social: 2 } },
+                    { text: "Adventure outdoors", value: "adventurer", points: { homebody: 1, adventurer: 3, social: 2 } },
+                    { text: "Social event with friends", value: "social", points: { homebody: 2, adventurer: 1, social: 3 } }
+                ]
+            },
+            {
+                id: 2,
+                question: "How do you show love?",
+                options: [
+                    { text: "Words of affirmation", value: "words", points: { words: 3, actions: 1, gifts: 2, time: 2 } },
+                    { text: "Acts of service", value: "actions", points: { words: 1, actions: 3, gifts: 2, time: 2 } },
+                    { text: "Thoughtful gifts", value: "gifts", points: { words: 2, actions: 2, gifts: 3, time: 1 } },
+                    { text: "Quality time", value: "time", points: { words: 2, actions: 2, gifts: 1, time: 3 } }
+                ]
+            },
+            {
+                id: 3,
+                question: "What's your relationship with change?",
+                options: [
+                    { text: "I embrace it", value: "embrace", points: { embrace: 3, cautious: 1, resistant: 0 } },
+                    { text: "I'm cautious but open", value: "cautious", points: { embrace: 2, cautious: 3, resistant: 1 } },
+                    { text: "I prefer stability", value: "resistant", points: { embrace: 1, cautious: 2, resistant: 3 } }
+                ]
+            },
+            {
+                id: 4,
+                question: "How do you handle conflicts?",
+                options: [
+                    { text: "Talk it through immediately", value: "immediate", points: { immediate: 3, process: 2, avoid: 0 } },
+                    { text: "Take time to process first", value: "process", points: { immediate: 2, process: 3, avoid: 1 } },
+                    { text: "Need space to cool down", value: "avoid", points: { immediate: 0, process: 1, avoid: 3 } }
+                ]
+            },
+            {
+                id: 5,
+                question: "What's your ideal weekend?",
+                options: [
+                    { text: "Spontaneous adventures", value: "spontaneous", points: { spontaneous: 3, planned: 1, relaxed: 2 } },
+                    { text: "Well-planned activities", value: "planned", points: { spontaneous: 1, planned: 3, relaxed: 2 } },
+                    { text: "Relaxing and unstructured", value: "relaxed", points: { spontaneous: 2, planned: 1, relaxed: 3 } }
+                ]
+            },
+            {
+                id: 6,
+                question: "How important is personal space?",
+                options: [
+                    { text: "I need lots of alone time", value: "alone", points: { alone: 3, balanced: 2, together: 0 } },
+                    { text: "Balance of both", value: "balanced", points: { alone: 2, balanced: 3, together: 2 } },
+                    { text: "Prefer being together", value: "together", points: { alone: 0, balanced: 2, together: 3 } }
+                ]
+            },
+            {
+                id: 7,
+                question: "What's your approach to finances?",
+                options: [
+                    { text: "Careful planner and saver", value: "saver", points: { saver: 3, spender: 0, balanced: 2 } },
+                    { text: "Enjoy spending on experiences", value: "spender", points: { saver: 0, spender: 3, balanced: 1 } },
+                    { text: "Balanced approach", value: "balanced", points: { saver: 2, spender: 1, balanced: 3 } }
+                ]
+            },
+            {
+                id: 8,
+                question: "How do you feel about social media?",
+                options: [
+                    { text: "Love sharing our life", value: "share", points: { share: 3, private: 0, selective: 2 } },
+                    { text: "Keep relationship private", value: "private", points: { share: 0, private: 3, selective: 1 } },
+                    { text: "Selective sharing", value: "selective", points: { share: 2, private: 1, selective: 3 } }
+                ]
+            },
+            {
+                id: 9,
+                question: "What's your communication style?",
+                options: [
+                    { text: "Very expressive and open", value: "expressive", points: { expressive: 3, reserved: 0, thoughtful: 2 } },
+                    { text: "More reserved and thoughtful", value: "reserved", points: { expressive: 0, reserved: 3, thoughtful: 2 } },
+                    { text: "Balanced depending on situation", value: "thoughtful", points: { expressive: 2, reserved: 2, thoughtful: 3 } }
+                ]
+            },
+            {
+                id: 10,
+                question: "How do you view the future?",
+                options: [
+                    { text: "Excited and optimistic", value: "optimistic", points: { optimistic: 3, realistic: 2, cautious: 1 } },
+                    { text: "Realistic and prepared", value: "realistic", points: { optimistic: 2, realistic: 3, cautious: 2 } },
+                    { text: "Cautiously hopeful", value: "cautious", points: { optimistic: 1, realistic: 2, cautious: 3 } }
+                ]
+            }
+        ]
     }
 };
 
@@ -439,16 +544,261 @@ function showGamePlay() {
     showPage('gamePlayPage');
 }
 
-// Deck Selection
+// Couples Mode Functions
 function selectDeck(deckType) {
-    gameState.currentDeck = deckType;
-    gameState.shuffledDeck = [...cardDecks[deckType].cards];
-    shuffleArray(gameState.shuffledDeck);
-    gameState.currentCardIndex = 0;
+    if (deckType === 'fall-in-love') {
+        gameState.couplesMode.isActive = true;
+        gameState.currentDeck = deckType;
+        showGamePlay();
+        initializeCouplesMode();
+    } else {
+        gameState.couplesMode.isActive = false;
+        gameState.currentDeck = deckType;
+        gameState.shuffledDeck = [...cardDecks[deckType].cards];
+        shuffleArray(gameState.shuffledDeck);
+        gameState.currentCardIndex = 0;
+        
+        document.getElementById('currentDeckName').textContent = cardDecks[deckType].name;
+        updateCardCounter();
+        showGamePlay();
+    }
+}
+
+function initializeCouplesMode() {
+    document.getElementById('currentDeckName').textContent = cardDecks['fall-in-love'].name;
+    document.getElementById('cardContainer').classList.add('hidden');
+    document.getElementById('couplesMode').classList.remove('hidden');
+    document.getElementById('gameControls').classList.add('hidden');
     
-    document.getElementById('currentDeckName').textContent = cardDecks[deckType].name;
-    updateCardCounter();
-    showGamePlay();
+    // Reset couples mode state
+    gameState.couplesMode.player1Answers = [];
+    gameState.couplesMode.player2Answers = [];
+    gameState.couplesMode.currentQuestion = 0;
+    gameState.couplesMode.currentPlayer = 1;
+    
+    updateCouplesUI();
+}
+
+function startCompatibilityTest() {
+    gameState.couplesMode.currentQuestion = 0;
+    gameState.couplesMode.currentPlayer = 1;
+    gameState.couplesMode.player1Answers = [];
+    gameState.couplesMode.player2Answers = [];
+    
+    document.getElementById('startCompatibilityBtn').style.display = 'none';
+    showQuestion();
+}
+
+function showQuestion() {
+    const questions = cardDecks['fall-in-love'].questions;
+    const currentQ = questions[gameState.couplesMode.currentQuestion];
+    
+    document.getElementById('questionNumber').textContent = gameState.couplesMode.currentQuestion + 1;
+    document.getElementById('compatibilityQuestion').textContent = currentQ.question;
+    document.getElementById('currentPlayerNum').textContent = gameState.couplesMode.currentPlayer;
+    
+    // Display answer options
+    const optionsContainer = document.getElementById('answerOptions');
+    optionsContainer.innerHTML = '';
+    
+    currentQ.options.forEach((option, index) => {
+        const optionDiv = document.createElement('div');
+        optionDiv.className = 'answer-option';
+        optionDiv.textContent = option.text;
+        optionDiv.onclick = () => selectAnswer(option.value, option.points);
+        optionsContainer.appendChild(optionDiv);
+    });
+    
+    updateProgressBars();
+}
+
+function selectAnswer(value, points) {
+    const currentPlayerAnswers = gameState.couplesMode.currentPlayer === 1 ? 
+        gameState.couplesMode.player1Answers : gameState.couplesMode.player2Answers;
+    
+    currentPlayerAnswers.push({ value, points });
+    
+    // Move to next player or question
+    if (gameState.couplesMode.currentPlayer === 1) {
+        gameState.couplesMode.currentPlayer = 2;
+        showQuestion();
+    } else {
+        gameState.couplesMode.currentPlayer = 1;
+        gameState.couplesMode.currentQuestion++;
+        
+        if (gameState.couplesMode.currentQuestion < cardDecks['fall-in-love'].questions.length) {
+            showQuestion();
+        } else {
+            calculateCompatibility();
+        }
+    }
+    
+    playSound('draw');
+}
+
+function updateProgressBars() {
+    const totalQuestions = cardDecks['fall-in-love'].questions.length;
+    const player1Progress = (gameState.couplesMode.player1Answers.length / totalQuestions) * 100;
+    const player2Progress = (gameState.couplesMode.player2Answers.length / totalQuestions) * 100;
+    
+    document.getElementById('player1Progress').style.width = player1Progress + '%';
+    document.getElementById('player2Progress').style.width = player2Progress + '%';
+}
+
+function updateCouplesUI() {
+    // Update UI elements for couples mode
+    const container = document.getElementById('cardContainer') || document.querySelector('.card-container');
+    const gameControls = document.getElementById('gameControls') || document.querySelector('.game-controls');
+    
+    if (container) container.classList.toggle('hidden', gameState.couplesMode.isActive);
+    if (gameControls) gameControls.classList.toggle('hidden', gameState.couplesMode.isActive);
+    document.getElementById('couplesMode').classList.toggle('hidden', !gameState.couplesMode.isActive);
+}
+
+function calculateCompatibility() {
+    const player1Answers = gameState.couplesMode.player1Answers;
+    const player2Answers = gameState.couplesMode.player2Answers;
+    
+    let totalScore = 0;
+    let maxScore = 0;
+    const categories = {
+        'Lifestyle': 0,
+        'Communication': 0,
+        'Values': 0,
+        'Social': 0
+    };
+    
+    // Calculate compatibility for each question
+    for (let i = 0; i < player1Answers.length; i++) {
+        const p1Answer = player1Answers[i];
+        const p2Answer = player2Answers[i];
+        
+        // Calculate compatibility score for this question
+        let questionScore = 0;
+        let questionMax = 0;
+        
+        for (const category in p1Answer.points) {
+            const p1Points = p1Answer.points[category] || 0;
+            const p2Points = p2Answer.points[category] || 0;
+            
+            // Compatibility is based on how similar their preferences are
+            const compatibility = Math.max(0, 3 - Math.abs(p1Points - p2Points));
+            questionScore += compatibility;
+            questionMax += 3;
+            
+            // Add to category scores
+            if (i < 3) categories['Lifestyle'] += compatibility;
+            else if (i < 6) categories['Communication'] += compatibility;
+            else if (i < 8) categories['Values'] += compatibility;
+            else categories['Social'] += compatibility;
+        }
+        
+        totalScore += questionScore;
+        maxScore += questionMax;
+    }
+    
+    const overallPercentage = Math.round((totalScore / maxScore) * 100);
+    
+    // Calculate category percentages
+    for (const category in categories) {
+        categories[category] = Math.round((categories[category] / (maxScore / 4)) * 100);
+    }
+    
+    showCompatibilityResults(overallPercentage, categories);
+}
+
+function showCompatibilityResults(percentage, categories) {
+    const modal = document.getElementById('compatibilityResultsModal');
+    
+    // Animate the percentage
+    animatePercentage(percentage);
+    
+    // Set message based on percentage
+    let message, advice;
+    if (percentage >= 80) {
+        message = "Perfect Match! You're incredibly compatible! 💕";
+        advice = "Your values and preferences align beautifully. You have a strong foundation for a lasting relationship filled with understanding and mutual respect.";
+    } else if (percentage >= 60) {
+        message = "Great Match! You have wonderful compatibility! 💖";
+        advice = "You share many important values and preferences. Your differences can actually complement each other and create a balanced, dynamic relationship.";
+    } else if (percentage >= 40) {
+        message = "Good Potential! You have some nice connections! 💝";
+        advice = "You have areas of compatibility that can grow stronger with communication and understanding. Focus on your shared values while respecting your differences.";
+    } else {
+        message = "Interesting Dynamic! You're quite different! 💗";
+        advice = "Your differences can lead to growth and new perspectives. The key is open communication and finding appreciation for your unique qualities.";
+    }
+    
+    document.getElementById('compatibilityMessage').textContent = message;
+    document.getElementById('compatibilityAdvice').textContent = advice;
+    
+    // Display category breakdown
+    const categoriesContainer = document.getElementById('compatibilityCategories');
+    categoriesContainer.innerHTML = '';
+    
+    for (const [category, score] of Object.entries(categories)) {
+        const categoryDiv = document.createElement('div');
+        categoryDiv.className = 'category-score';
+        categoryDiv.innerHTML = `
+            <div class="category-name">${category}</div>
+            <div class="category-percentage">${score}%</div>
+        `;
+        categoriesContainer.appendChild(categoryDiv);
+    }
+    
+    modal.classList.add('active');
+    playSound('favorite');
+}
+
+function animatePercentage(targetPercentage) {
+    const element = document.getElementById('compatibilityPercentage');
+    let currentPercentage = 0;
+    const increment = targetPercentage / 30;
+    
+    const timer = setInterval(() => {
+        currentPercentage += increment;
+        if (currentPercentage >= targetPercentage) {
+            currentPercentage = targetPercentage;
+            clearInterval(timer);
+        }
+        element.textContent = Math.round(currentPercentage) + '%';
+    }, 50);
+}
+
+function closeCompatibilityResults() {
+    document.getElementById('compatibilityResultsModal').classList.remove('active');
+}
+
+function resetCouplesQuiz() {
+    gameState.couplesMode.player1Answers = [];
+    gameState.couplesMode.player2Answers = [];
+    gameState.couplesMode.currentQuestion = 0;
+    gameState.couplesMode.currentPlayer = 1;
+    
+    document.getElementById('startCompatibilityBtn').style.display = 'block';
+    document.getElementById('answerOptions').innerHTML = '';
+    document.getElementById('questionNumber').textContent = '1';
+    document.getElementById('compatibilityQuestion').textContent = 'Ready to discover your compatibility?';
+    document.getElementById('currentPlayerNum').textContent = '1';
+    
+    updateProgressBars();
+    closeCompatibilityResults();
+}
+
+function shareResults() {
+    const percentage = document.getElementById('compatibilityPercentage').textContent;
+    const text = `We just took the Fall in Love quiz and got ${percentage} match! 💕 Try it yourself!`;
+    
+    if (navigator.share) {
+        navigator.share({
+            title: 'ANACARD Compatibility Results',
+            text: text
+        });
+    } else {
+        // Fallback - copy to clipboard
+        navigator.clipboard.writeText(text);
+        alert('Results copied to clipboard!');
+    }
 }
 
 function shuffleArray(array) {
