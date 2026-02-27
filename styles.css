@@ -965,7 +965,288 @@ body {
     line-height: 1.4;
 }
 
-/* Custom Deck Builder Styles */
+/* Mini Games Interface Styles */
+.mini-game-interface {
+    text-align: center;
+    padding: 20px;
+}
+
+.mini-game-interface h3 {
+    color: var(--primary-color);
+    margin-bottom: 15px;
+    font-size: 1.8rem;
+}
+
+.mini-game-interface p {
+    color: var(--text-color);
+    margin-bottom: 25px;
+    font-size: 1.1rem;
+}
+
+.mini-game-content {
+    margin-bottom: 30px;
+}
+
+.mini-game-controls {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+}
+
+/* Story Builder Styles */
+.story-builder-game {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.story-display {
+    background: var(--light-color);
+    border-radius: var(--border-radius);
+    padding: 25px;
+    margin-bottom: 25px;
+    min-height: 120px;
+    border: 2px solid var(--primary-color);
+    box-shadow: var(--theme-shadow);
+}
+
+.story-display p {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    color: var(--dark-color);
+    font-style: italic;
+}
+
+.player-input {
+    text-align: center;
+}
+
+.player-input p {
+    margin-bottom: 15px;
+    font-weight: 600;
+    color: var(--primary-color);
+}
+
+.player-input input {
+    width: 100%;
+    max-width: 400px;
+    padding: 15px;
+    border: 2px solid var(--primary-color);
+    border-radius: 8px;
+    font-size: 1rem;
+    margin-bottom: 15px;
+    background: white;
+    color: var(--dark-color);
+}
+
+[data-theme="dark"] .player-input input {
+    background: var(--light-color);
+    color: var(--text-color);
+}
+
+/* Guess Player Styles */
+.guess-player-game {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.trait-display {
+    margin-bottom: 30px;
+}
+
+.trait-display h4 {
+    color: var(--accent-color);
+    margin-bottom: 15px;
+    font-size: 1.3rem;
+}
+
+.trait-card {
+    background: linear-gradient(135deg, var(--accent-color), var(--secondary-color));
+    color: white;
+    border-radius: var(--border-radius);
+    padding: 25px;
+    font-size: 1.2rem;
+    font-weight: 500;
+    box-shadow: 0 8px 25px rgba(69, 183, 209, 0.3);
+    margin-bottom: 20px;
+}
+
+.guess-options {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.guess-btn {
+    background: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 15px 20px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+    box-shadow: 0 4px 15px rgba(255, 107, 107, 0.2);
+}
+
+.guess-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(255, 107, 107, 0.3);
+}
+
+/* Memory Match Styles */
+.memory-match-game {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.memory-display {
+    margin-bottom: 30px;
+}
+
+.memory-display h4 {
+    color: var(--secondary-color);
+    margin-bottom: 15px;
+    font-size: 1.3rem;
+}
+
+.memory-card {
+    background: linear-gradient(135deg, var(--secondary-color), var(--accent-color));
+    color: white;
+    border-radius: var(--border-radius);
+    padding: 25px;
+    font-size: 1.2rem;
+    font-weight: 500;
+    box-shadow: 0 8px 25px rgba(78, 205, 196, 0.3);
+    margin-bottom: 20px;
+}
+
+.memory-test {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.memory-test p {
+    margin-bottom: 15px;
+    font-weight: 600;
+    color: var(--secondary-color);
+}
+
+.memory-test input {
+    width: 100%;
+    max-width: 200px;
+    padding: 15px;
+    border: 2px solid var(--secondary-color);
+    border-radius: 8px;
+    font-size: 1rem;
+    margin-bottom: 15px;
+    text-align: center;
+    background: white;
+    color: var(--dark-color);
+}
+
+[data-theme="dark"] .memory-test input {
+    background: var(--light-color);
+    color: var(--text-color);
+}
+
+/* Photo Challenge Styles */
+.photo-challenge-game {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.challenge-display {
+    margin-bottom: 30px;
+}
+
+.challenge-display h4 {
+    color: var(--warm-color);
+    margin-bottom: 15px;
+    font-size: 1.3rem;
+}
+
+.challenge-card {
+    background: linear-gradient(135deg, var(--warm-color), var(--primary-color));
+    color: white;
+    border-radius: var(--border-radius);
+    padding: 25px;
+    font-size: 1.3rem;
+    font-weight: 600;
+    box-shadow: 0 8px 25px rgba(255, 230, 109, 0.3);
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.photo-instructions {
+    text-align: center;
+    margin-bottom: 25px;
+    padding: 20px;
+    background: rgba(255, 230, 109, 0.1);
+    border-radius: var(--border-radius);
+    border: 2px solid var(--warm-color);
+}
+
+.photo-instructions p {
+    margin-bottom: 10px;
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--warm-color);
+}
+
+.timer-display {
+    font-size: 1.1rem;
+    color: var(--primary-color);
+    font-weight: 600;
+}
+
+.timer-display span {
+    font-size: 1.5rem;
+    color: var(--primary-color);
+    font-weight: 700;
+}
+
+.challenge-controls {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+/* Game Info Styles */
+.game-info {
+    text-align: center;
+    padding: 15px;
+    background: var(--light-color);
+    border-radius: 8px;
+    color: var(--text-color);
+    font-weight: 600;
+}
+
+[data-theme="dark"] .game-info {
+    background: var(--dark-color);
+    color: var(--text-color);
+}
+
+/* Mini Game Responsive Design */
+@media (max-width: 768px) {
+    .guess-options {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .challenge-controls {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .trait-card,
+    .memory-card,
+    .challenge-card {
+        font-size: 1.1rem;
+        padding: 20px;
+    }
+}
 .custom-deck-section {
     text-align: center;
     margin-bottom: 40px;

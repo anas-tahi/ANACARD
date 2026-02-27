@@ -970,6 +970,199 @@ function showMiniGameInterface(game) {
     }
 }
 
+function showGuessPlayerContent() {
+    const traits = [
+        "loves spicy food", "has traveled abroad", "plays a musical instrument",
+        "speaks multiple languages", "is afraid of spiders", "has never seen snow",
+        "can cook gourmet meals", "collects something unusual", "has a hidden talent",
+        "prefers tea over coffee", "is a morning person", "has broken a bone",
+        "can't swim", "has met a celebrity", "is allergic to something common"
+    ];
+    
+    const currentTrait = traits[Math.floor(Math.random() * traits.length)];
+    gameState.miniGame.data.currentTrait = currentTrait;
+    
+    const content = `
+        <div class="guess-player-game">
+            <div class="trait-display">
+                <h4>Who fits this trait?</h4>
+                <div class="trait-card">
+                    <p>"${currentTrait}"</p>
+                </div>
+            </div>
+            <div class="player-input">
+                <p>Make your guess!</p>
+                <div class="guess-options">
+                    <button onclick="makeGuess('player1')" class="guess-btn">Player 1</button>
+                    <button onclick="makeGuess('player2')" class="guess-btn">Player 2</button>
+                    <button onclick="makeGuess('player3')" class="guess-btn">Player 3</button>
+                    <button onclick="makeGuess('player4')" class="guess-btn">Player 4</button>
+                </div>
+            </div>
+            <div class="game-info">
+                <p>Round ${gameState.miniGame.data.currentRound} • Score: <span id="guessScore">0</span></p>
+            </div>
+        </div>
+    `;
+    
+    document.getElementById('miniGameContent').innerHTML = content;
+}
+
+function makeGuess(player) {
+    const correctPlayer = Math.floor(Math.random() * 4) + 1;
+    const guessedPlayer = parseInt(player.replace('player', ''));
+    
+    if (guessedPlayer === correctPlayer) {
+        gameState.miniGame.data.scores = gameState.miniGame.data.scores || 0;
+        gameState.miniGame.data.scores++;
+        showNotification(`Correct! It was Player ${correctPlayer}! +1 point`);
+    } else {
+        showNotification(`Wrong! It was actually Player ${correctPlayer}`);
+    }
+    
+    document.getElementById('guessScore').textContent = gameState.miniGame.data.scores || 0;
+    
+    // Next round
+    gameState.miniGame.data.currentRound++;
+    setTimeout(() => showGuessPlayerContent(), 2000);
+    playSound('draw');
+}
+
+function showMemoryMatchContent() {
+    if (gameState.miniGame.data.currentRound === 1) {
+        // First, collect some "shared details" from players
+        gameState.miniGame.data.sharedDetails = [
+            "Player 1's favorite color is blue",
+            "Player 2 has a dog named Max",
+            "Player 3 loves pizza with pineapple",
+            "Player 4 has been to Japan",
+            "Player 1 plays guitar",
+            "Player 2 is allergic to cats",
+            "Player 3 speaks 3 languages",
+            "Player 4 collects vintage stamps"
+        ];
+    }
+    
+    const detail = gameState.miniGame.data.sharedDetails[Math.floor(Math.random() * gameState.miniGame.data.sharedDetails.length)];
+    
+    const content = `
+        <div class="memory-match-game">
+            <div class="memory-display">
+                <h4>Remember this detail:</h4>
+                <div class="memory-card">
+                    <p>${detail}</p>
+                </div>
+            </div>
+            <div class="memory-test">
+                <p>Now, who does this belong to?</p>
+                <input type="text" id="memoryAnswer" placeholder="Enter player number..." />
+                <button onclick="checkMemoryAnswer('${detail}')" class="control-button primary">
+                    <i class="fas fa-check"></i> Submit Answer
+                </button>
+            </div>
+            <div class="game-info">
+                <p>Round ${gameState.miniGame.data.currentRound} • Score: <span id="memoryScore">0</span></p>
+            </div>
+        </div>
+    `;
+    
+    document.getElementById('miniGameContent').innerHTML = content;
+}
+
+function checkMemoryAnswer(correctDetail) {
+    const answer = document.getElementById('memoryAnswer').value.trim();
+    const playerNum = correctDetail.match(/Player (\d+)/);
+    const correctPlayer = playerNum ? playerNum[1] : '';
+    
+    if (answer === correctPlayer) {
+        gameState.miniGame.data.scores = gameState.miniGame.data.scores || 0;
+        gameState.miniGame.data.scores++;
+        showNotification(`Correct! It was Player ${correctPlayer}! +1 point`);
+    } else {
+        showNotification(`Wrong! It was Player ${correctPlayer}`);
+    }
+    
+    document.getElementById('memoryScore').textContent = gameState.miniGame.data.scores || 0;
+    
+    // Next round
+    gameState.miniGame.data.currentRound++;
+    setTimeout(() => showMemoryMatchContent(), 2000);
+    playSound('draw');
+}
+
+function showPhotoChallengeContent() {
+    const challenges = [
+        "Take a photo of something red",
+        "Make your funniest face",
+        "Find something round",
+        "Strike a superhero pose",
+        "Show us your favorite snack",
+        "Make an animal sound",
+        "Find something that makes you happy",
+        "Do your best dance move",
+        "Show us your shoes",
+        "Make a heart with your hands",
+        "Find something that starts with 'B'",
+        "Show us your workspace"
+    ];
+    
+    const currentChallenge = challenges[gameState.miniGame.data.currentChallenge % challenges.length];
+    
+    const content = `
+        <div class="photo-challenge-game">
+            <div class="challenge-display">
+                <h4>Photo Challenge!</h4>
+                <div class="challenge-card">
+                    <p>${currentChallenge}</p>
+                </div>
+            </div>
+            <div class="photo-instructions">
+                <p>📸 Take a photo and show everyone!</p>
+                <div class="timer-display" id="photoTimer">
+                    <p>Time remaining: <span id="timeLeft">30</span>s</p>
+                </div>
+            </div>
+            <div class="challenge-controls">
+                <button onclick="startPhotoTimer()" class="control-button primary">
+                    <i class="fas fa-camera"></i> Start Challenge
+                </button>
+                <button onclick="nextPhotoChallenge()" class="control-button secondary">
+                    <i class="fas fa-forward"></i> Next Challenge
+                </button>
+            </div>
+            <div class="game-info">
+                <p>Challenge ${gameState.miniGame.data.currentChallenge + 1} of ${challenges.length}</p>
+            </div>
+        </div>
+    `;
+    
+    document.getElementById('miniGameContent').innerHTML = content;
+}
+
+function startPhotoTimer() {
+    let timeLeft = 30;
+    const timerElement = document.getElementById('timeLeft');
+    
+    const timer = setInterval(() => {
+        timeLeft--;
+        timerElement.textContent = timeLeft;
+        
+        if (timeLeft <= 0) {
+            clearInterval(timer);
+            showNotification("Time's up! Show your photo!");
+            playSound('favorite');
+        }
+    }, 1000);
+    
+    playSound('draw');
+}
+
+function nextPhotoChallenge() {
+    gameState.miniGame.data.currentChallenge++;
+    showPhotoChallengeContent();
+    playSound('shuffle');
+}
+
 function showStoryBuilderContent() {
     const content = `
         <div class="story-builder-game">
