@@ -910,7 +910,16 @@ function startMiniGame(gameType) {
             break;
     }
     
-    showMiniGameInterface(game);
+    // Show game play page first, then display mini game
+    showGamePlay();
+    document.getElementById('currentDeckName').textContent = game.name;
+    document.getElementById('cardCounter').textContent = 'Mini Game';
+    
+    // Show mini game interface
+    setTimeout(() => {
+        showMiniGameInterface(game);
+    }, 100);
+    
     playSound('favorite');
 }
 
@@ -936,6 +945,8 @@ function initPhotoChallenge() {
 }
 
 function showMiniGameInterface(game) {
+    console.log('Showing mini game interface for:', game.name);
+    
     const interface = `
         <div class="mini-game-interface">
             <h3>${game.name}</h3>
@@ -951,7 +962,13 @@ function showMiniGameInterface(game) {
         </div>
     `;
     
-    document.getElementById('cardText').innerHTML = interface;
+    const cardTextElement = document.getElementById('cardText');
+    if (cardTextElement) {
+        cardTextElement.innerHTML = interface;
+        console.log('Mini game interface loaded');
+    } else {
+        console.error('cardText element not found');
+    }
     
     // Initialize specific game content
     switch(gameState.miniGame.type) {
@@ -971,6 +988,8 @@ function showMiniGameInterface(game) {
 }
 
 function showGuessPlayerContent() {
+    console.log('Loading Guess Player content');
+    
     const traits = [
         "loves spicy food", "has traveled abroad", "plays a musical instrument",
         "speaks multiple languages", "is afraid of spiders", "has never seen snow",
@@ -1005,7 +1024,13 @@ function showGuessPlayerContent() {
         </div>
     `;
     
-    document.getElementById('miniGameContent').innerHTML = content;
+    const miniGameContent = document.getElementById('miniGameContent');
+    if (miniGameContent) {
+        miniGameContent.innerHTML = content;
+        console.log('Guess Player content loaded');
+    } else {
+        console.error('miniGameContent element not found');
+    }
 }
 
 function makeGuess(player) {
@@ -1164,6 +1189,8 @@ function nextPhotoChallenge() {
 }
 
 function showStoryBuilderContent() {
+    console.log('Loading Story Builder content');
+    
     const content = `
         <div class="story-builder-game">
             <div class="story-display" id="storyDisplay">
@@ -1179,7 +1206,13 @@ function showStoryBuilderContent() {
         </div>
     `;
     
-    document.getElementById('miniGameContent').innerHTML = content;
+    const miniGameContent = document.getElementById('miniGameContent');
+    if (miniGameContent) {
+        miniGameContent.innerHTML = content;
+        console.log('Story Builder content loaded');
+    } else {
+        console.error('miniGameContent element not found');
+    }
 }
 
 function addStorySentence() {
@@ -1311,6 +1344,7 @@ function exitMiniGame() {
     gameState.miniGame.type = null;
     gameState.miniGame.data = {};
     showDeckSelection();
+    playSound('shuffle');
 }
 
 // Helper Functions
