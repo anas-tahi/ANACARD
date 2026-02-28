@@ -1233,20 +1233,33 @@ function addStorySentence() {
             gameState.miniGame.data.currentPlayer === 1 ? 2 : 1;
         
         // Update player indicator
-        document.querySelector('.player-input p').textContent = 
-            `Player ${gameState.miniGame.data.currentPlayer}, add one sentence to continue the story:`;
+        const playerIndicator = document.querySelector('.player-input p');
+        if (playerIndicator) {
+            playerIndicator.textContent = 
+                `Player ${gameState.miniGame.data.currentPlayer}, add one sentence to continue the story:`;
+        }
         
         playSound('draw');
+        showNotification(`Player ${gameState.miniGame.data.currentPlayer}'s turn!`);
+    } else {
+        showNotification('Please enter a sentence!');
     }
 }
 
 function updateStoryDisplay() {
     const storyDisplay = document.getElementById('storyDisplay');
-    const storyText = gameState.miniGame.data.story
-        .map(item => `${item.text}`)
-        .join(' ');
+    if (!storyDisplay) return;
     
-    storyDisplay.innerHTML = `<p><strong>Story so far:</strong> ${storyText}</p>`;
+    if (gameState.miniGame.data.story.length === 0) {
+        storyDisplay.innerHTML = '<p><em>Your story will begin here...</em></p>';
+        return;
+    }
+    
+    const storyText = gameState.miniGame.data.story
+        .map((item, index) => `<strong>P${item.player}:</strong> ${item.text}`)
+        .join('<br><br>');
+    
+    storyDisplay.innerHTML = `<div class="story-content">${storyText}</div>`;
 }
 
 // Custom Deck Builder Functions
