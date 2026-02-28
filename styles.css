@@ -906,6 +906,268 @@ body {
     opacity: 0.9;
 }
 
+/* Group Games Styles */
+.group-games-section {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.group-games-section h3 {
+    color: var(--accent-color);
+    margin-bottom: 30px;
+    font-size: 1.8rem;
+}
+
+.group-games-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 25px;
+    margin-bottom: 30px;
+}
+
+.group-game-card {
+    background: linear-gradient(135deg, var(--accent-color), var(--primary-color));
+    border-radius: var(--border-radius);
+    padding: 25px;
+    text-align: center;
+    cursor: pointer;
+    transition: var(--transition);
+    box-shadow: 0 8px 25px rgba(69, 183, 209, 0.2);
+    border: 2px solid transparent;
+    position: relative;
+    overflow: hidden;
+}
+
+.group-game-card::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
+    transform: rotate(45deg);
+    transition: all 0.5s;
+    opacity: 0;
+}
+
+.group-game-card:hover::before {
+    animation: shimmer 0.5s ease-in-out;
+}
+
+.group-game-card:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 0 15px 40px rgba(69, 183, 209, 0.3);
+    border-color: var(--accent-color);
+}
+
+.group-game-icon {
+    font-size: 2.5rem;
+    color: white;
+    margin-bottom: 15px;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.group-game-card h4 {
+    color: white;
+    margin-bottom: 12px;
+    font-size: 1.3rem;
+    font-weight: 600;
+}
+
+.group-game-card p {
+    color: rgba(255, 255, 255, 0.9);
+    margin-bottom: 20px;
+    font-size: 0.95rem;
+    line-height: 1.4;
+}
+
+.game-meta {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.game-meta span {
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.game-meta i {
+    font-size: 0.7rem;
+}
+
+.difficulty {
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.difficulty.easy {
+    background: var(--secondary-color);
+}
+
+.difficulty.medium {
+    background: var(--warm-color);
+}
+
+.difficulty.hard {
+    background: var(--primary-color);
+}
+
+/* Group Game Interface Styles */
+.group-game-interface {
+    text-align: center;
+    padding: 20px;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.group-game-interface h3 {
+    color: var(--accent-color);
+    margin-bottom: 15px;
+    font-size: 1.8rem;
+}
+
+.group-game-interface p {
+    color: var(--text-color);
+    margin-bottom: 25px;
+    font-size: 1.1rem;
+}
+
+.group-game-content {
+    margin-bottom: 30px;
+    background: var(--light-color);
+    border-radius: var(--border-radius);
+    padding: 25px;
+    border: 2px solid var(--accent-color);
+}
+
+.group-game-controls {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+/* Role Assignment Styles */
+.role-assignment {
+    background: linear-gradient(135deg, var(--accent-color), var(--secondary-color));
+    color: white;
+    border-radius: var(--border-radius);
+    padding: 30px;
+    margin-bottom: 25px;
+    text-align: center;
+}
+
+.role-card {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 20px;
+    margin: 15px 0;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.role-card h4 {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+    color: white;
+}
+
+.role-card p {
+    font-size: 1.1rem;
+    color: rgba(255, 255, 255, 0.9);
+    margin-bottom: 0;
+}
+
+/* Phase Display Styles */
+.phase-display {
+    background: var(--light-color);
+    border-radius: var(--border-radius);
+    padding: 20px;
+    margin-bottom: 25px;
+    border-left: 5px solid var(--accent-color);
+}
+
+.phase-display h4 {
+    color: var(--accent-color);
+    margin-bottom: 10px;
+    font-size: 1.3rem;
+}
+
+.phase-display p {
+    color: var(--text-color);
+    font-size: 1rem;
+    margin-bottom: 0;
+}
+
+/* Player List Styles */
+.player-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+    margin-bottom: 25px;
+}
+
+.player-item {
+    background: var(--light-color);
+    border-radius: 8px;
+    padding: 15px;
+    text-align: center;
+    border: 2px solid var(--primary-color);
+}
+
+.player-item.alive {
+    border-color: var(--secondary-color);
+}
+
+.player-item.eliminated {
+    border-color: var(--primary-color);
+    opacity: 0.6;
+    text-decoration: line-through;
+}
+
+.player-item h5 {
+    color: var(--dark-color);
+    margin-bottom: 5px;
+    font-size: 1.1rem;
+}
+
+.player-item .role {
+    color: var(--accent-color);
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+/* Group Game Responsive Design */
+@media (max-width: 768px) {
+    .group-games-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .game-meta {
+        flex-direction: column;
+        gap: 8px;
+    }
+    
+    .player-list {
+        grid-template-columns: 1fr;
+    }
+    
+    .group-game-controls {
+        flex-direction: column;
+        align-items: center;
+    }
+}
+
 /* Mini Games Styles */
 .mini-games-section {
     margin-bottom: 40px;

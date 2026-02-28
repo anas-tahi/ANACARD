@@ -39,6 +39,62 @@ let gameState = {
     currentTest: null // Personality/Connection tests
 };
 
+// Group Game State
+let groupGameState = {
+    isActive: false,
+    currentGame: null,
+    players: [],
+    roles: {},
+    currentPhase: 'setup',
+    round: 1,
+    timer: null,
+    currentLocation: null
+};
+
+// Group Games Configuration
+const groupGames = {
+    'imposter': {
+        name: "Find the Imposter",
+        description: "One player is secretly the imposter. Find them before it's too late!",
+        icon: "user-secret",
+        players: "4-10",
+        time: "15-20 min",
+        difficulty: "Medium"
+    },
+    'mafia': {
+        name: "Mafia",
+        description: "Classic social deduction game. Mafia vs Civilians in a battle of wits!",
+        icon: "user-ninja",
+        players: "5-12",
+        time: "20-30 min", 
+        difficulty: "Hard"
+    },
+    'werewolf': {
+        name: "Werewolf",
+        description: "Villagers must find the werewolves before they eliminate everyone!",
+        icon: "wolf",
+        players: "6-15",
+        time: "25-35 min",
+        difficulty: "Hard"
+    },
+    'spyfall': {
+        name: "Spyfall",
+        description: "One player is the spy who doesn't know the location. Find the spy!",
+        icon: "user-secret",
+        players: "3-8",
+        time: "10-15 min",
+        difficulty: "Easy"
+    },
+    'two-rooms': {
+        name: "Two Rooms and a Boom",
+        description: "Teams try to communicate secret words without being in the same room!",
+        icon: "door-open",
+        players: "6-12",
+        time: "15-25 min",
+        difficulty: "Medium"
+    }
+};
+
 // Game Modes Configuration
 const gameModes = {
     classic: {
