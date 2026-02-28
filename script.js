@@ -2067,7 +2067,179 @@ function updateStats() {
     saveGameState();
 }
 
-// Enhanced existing functions
+// Additional UI Functions
+function toggleFavorite() {
+    const currentCardText = document.getElementById('cardText').textContent;
+    const favoriteIcon = document.getElementById('favoriteIcon');
+    
+    if (gameState.favoriteCards.includes(currentCardText)) {
+        // Remove from favorites
+        gameState.favoriteCards = gameState.favoriteCards.filter(card => card !== currentCardText);
+        favoriteIcon.className = 'far fa-heart';
+        showNotification('Removed from favorites');
+    } else {
+        // Add to favorites
+        gameState.favoriteCards.push(currentCardText);
+        favoriteIcon.className = 'fas fa-heart';
+        gameState.stats.cardsFavorited++;
+        showNotification('Added to favorites');
+    }
+    
+    updateFavoriteCount();
+    saveGameState();
+    playSound('favorite');
+}
+
+function rateCard() {
+    const rateIcon = document.getElementById('rateIcon');
+    if (rateIcon.className === 'far fa-star') {
+        rateIcon.className = 'fas fa-star';
+        showNotification('Card rated!');
+    } else {
+        rateIcon.className = 'far fa-star';
+        showNotification('Rating removed');
+    }
+    playSound('favorite');
+}
+
+function toggleGameMenu() {
+    const menu = document.getElementById('gameMenu');
+    menu.classList.toggle('hidden');
+}
+
+function toggleEveryoneAnswers() {
+    gameState.everyoneAnswersMode = !gameState.everyoneAnswersMode;
+    document.getElementById('everyoneAnswersStatus').textContent = gameState.everyoneAnswersMode ? 'ON' : 'OFF';
+    showNotification(`Everyone Answers: ${gameState.everyoneAnswersMode ? 'ON' : 'OFF'}`);
+}
+
+function toggleHostMode() {
+    gameState.hostMode = !gameState.hostMode;
+    document.getElementById('hostModeStatus').textContent = gameState.hostMode ? 'ON' : 'OFF';
+    showNotification(`Host Mode: ${gameState.hostMode ? 'ON' : 'OFF'}`);
+}
+
+function showSavedCards() {
+    if (gameState.savedCards.length === 0) {
+        showNotification('No saved cards yet!');
+        return;
+    }
+    
+    const savedCardsHtml = gameState.savedCards.map((card, index) => `
+        <div class="saved-card">
+            <p>${card.text}</p>
+            <small>${card.deck} • ${card.timestamp}</small>
+        </div>
+    `).join('');
+    
+    document.getElementById('cardText').innerHTML = `
+        <div class="saved-cards-container">
+            <h3>Saved Cards (${gameState.savedCards.length})</h3>
+            ${savedCardsHtml}
+        </div>
+    `;
+}
+
+function showFavoriteCards() {
+    if (gameState.favoriteCards.length === 0) {
+        showNotification('No favorite cards yet!');
+        return;
+    }
+    
+    const favoriteCardsHtml = gameState.favoriteCards.map((card, index) => `
+        <div class="favorite-card">
+            <p>${card}</p>
+        </div>
+    `).join('');
+    
+    document.getElementById('cardText').innerHTML = `
+        <div class="favorite-cards-container">
+            <h3>Favorite Cards (${gameState.favoriteCards.length})</h3>
+            ${favoriteCardsHtml}
+        </div>
+    `;
+}
+
+function showStats() {
+    const statsHtml = `
+        <div class="stats-container">
+            <h3>Your Statistics</h3>
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <i class="fas fa-layer-group"></i>
+                    <div>
+                        <strong>${gameState.stats.cardsDrawn}</strong>
+                        <span>Cards Drawn</span>
+                    </div>
+                </div>
+                <div class="stat-item">
+                    <i class="fas fa-bookmark"></i>
+                    <div>
+                        <strong>${gameState.stats.cardsSaved}</strong>
+                        <span>Cards Saved</span>
+                    </div>
+                </div>
+                <div class="stat-item">
+                    <i class="fas fa-heart"></i>
+                    <div>
+                        <strong>${gameState.stats.cardsFavorited}</strong>
+                        <span>Favorites</span>
+                    </div>
+                </div>
+                <div class="stat-item">
+                    <i class="fas fa-play"></i>
+                    <div>
+                        <strong>${gameState.stats.sessionsPlayed}</strong>
+                        <span>Sessions</span>
+                    </div>
+                </div>
+                <div class="stat-item">
+                    <i class="fas fa-clock"></i>
+                    <div>
+                        <strong>${formatTime(gameState.stats.totalTimeSpent)}</strong>
+                        <span>Total Time</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    document.getElementById('cardText').innerHTML = statsHtml;
+}
+
+function toggleSound() {
+    gameState.soundEnabled = !gameState.soundEnabled;
+    document.getElementById('soundStatus').textContent = gameState.soundEnabled ? 'ON' : 'OFF';
+    document.getElementById('soundIcon').className = gameState.soundEnabled ? 'fas fa-volume-up' : 'fas fa-volume-mute';
+    showNotification(`Sound: ${gameState.soundEnabled ? 'ON' : 'OFF'}`);
+}
+
+function resetDeck() {
+    gameState.currentCardIndex = 0;
+    shuffleArray(gameState.shuffledDeck);
+    updateCardCounter();
+    document.getElementById('cardText').textContent = 'Click "Draw Card" to start playing!';
+    showNotification('Deck reset!');
+    playSound('shuffle');
+}
+
+function toggleDarkMode() {
+    gameState.darkMode = !gameState.darkMode;
+    const themeIcon = document.getElementById('themeIcon');
+    
+    if (gameState.darkMode) {
+        document.body.setAttribute('data-theme', 'dark');
+        themeIcon.className = 'fas fa-sun';
+    } else {
+        document.body.removeAttribute('data-theme');
+        themeIcon.className = 'fas fa-moon';
+    }
+    
+    showNotification(`Dark mode: ${gameState.darkMode ? 'ON' : 'OFF'}`);
+    saveGameState();
+}
+
+// Core Game Functions
 function drawCard() {
     if (gameState.currentCardIndex >= gameState.shuffledDeck.length) {
         shuffleArray(gameState.shuffledDeck);
@@ -2082,13 +2254,6 @@ function drawCard() {
     // Update stats
     updateStats();
     
-    // Show timer for dare cards
-    if (gameState.currentDeck === 'dares') {
-        document.getElementById('timerSection').classList.remove('hidden');
-    } else {
-        document.getElementById('timerSection').classList.add('hidden');
-    }
-    
     // Reset favorite icon
     document.getElementById('favoriteIcon').className = 'far fa-heart';
     
@@ -2100,18 +2265,11 @@ function saveCard() {
     if (currentCardText && !gameState.savedCards.includes(currentCardText)) {
         gameState.savedCards.push({
             text: currentCardText,
-            deck: cardDecks[gameState.currentDeck].name,
+            deck: cardDecks[gameState.currentDeck]?.name || 'Unknown',
             timestamp: new Date().toLocaleString()
         });
         updateSavedCount();
         gameState.stats.cardsSaved++;
-        
-        // Visual feedback
-        const card = document.getElementById('currentCard');
-        card.style.animation = 'pulse 0.5s ease-in-out';
-        setTimeout(() => {
-            card.style.animation = '';
-        }, 500);
         
         playSound('save');
         saveGameState();
@@ -2122,15 +2280,61 @@ function shuffleDeck() {
     shuffleArray(gameState.shuffledDeck);
     gameState.currentCardIndex = 0;
     updateCardCounter();
-    
-    // Visual feedback
-    const card = document.getElementById('currentCard');
-    card.style.animation = 'pulse 0.5s ease-in-out';
-    setTimeout(() => {
-        card.style.animation = '';
-    }, 500);
-    
     playSound('shuffle');
+}
+
+function displayCard(card) {
+    const cardElement = document.getElementById('cardText');
+    if (typeof card === 'object' && card.text) {
+        cardElement.textContent = card.text;
+    } else {
+        cardElement.textContent = card;
+    }
+}
+
+function updateCardCounter() {
+    const counter = document.getElementById('cardCounter');
+    if (counter) {
+        counter.textContent = `${gameState.currentCardIndex}/${gameState.shuffledDeck.length}`;
+    }
+}
+
+function updateSavedCount() {
+    const savedCount = document.getElementById('savedCount');
+    if (savedCount) {
+        savedCount.textContent = gameState.savedCards.length;
+    }
+}
+
+function updateFavoriteCount() {
+    const favoriteCount = document.getElementById('favoriteCount');
+    if (favoriteCount) {
+        favoriteCount.textContent = gameState.favoriteCards.length;
+    }
+}
+
+function updateStatsDisplay() {
+    const statsDisplay = document.getElementById('statsDisplay');
+    if (statsDisplay) {
+        statsDisplay.innerHTML = `
+            <div class="stat-item">
+                <i class="fas fa-layer-group"></i>
+                <span>${gameState.stats.cardsDrawn} Cards Drawn</span>
+            </div>
+            <div class="stat-item">
+                <i class="fas fa-bookmark"></i>
+                <span>${gameState.stats.cardsSaved} Cards Saved</span>
+            </div>
+            <div class="stat-item">
+                <i class="fas fa-heart"></i>
+                <span>${gameState.stats.cardsFavorited} Favorites</span>
+            </div>
+            <div class="stat-item">
+                <i class="fas fa-play"></i>
+                <span>${gameState.stats.sessionsPlayed} Sessions</span>
+            </div>
+        `;
+    }
 }
 
 // Initialize on load
@@ -2161,14 +2365,16 @@ document.addEventListener('DOMContentLoaded', function() {
     
     const card = document.getElementById('currentCard');
     
-    card.addEventListener('touchstart', function(e) {
-        touchStartX = e.changedTouches[0].screenX;
-    });
-    
-    card.addEventListener('touchend', function(e) {
-        touchEndX = e.changedTouches[0].screenX;
-        handleSwipe();
-    });
+    if (card) {
+        card.addEventListener('touchstart', function(e) {
+            touchStartX = e.changedTouches[0].screenX;
+        });
+        
+        card.addEventListener('touchend', function(e) {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
+        });
+    }
     
     function handleSwipe() {
         const swipeThreshold = 50;
@@ -2176,8 +2382,8 @@ document.addEventListener('DOMContentLoaded', function() {
         
         if (Math.abs(diff) > swipeThreshold) {
             if (diff > 0) {
-                // Swipe left - skip card
-                skipCard();
+                // Swipe left - next card
+                drawCard();
             } else {
                 // Swipe right - save card
                 saveCard();
@@ -2185,8 +2391,8 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
     
-    // Prevent context menu on long press for better mobile experience
-    card.addEventListener('contextmenu', function(e) {
-        e.preventDefault();
-    });
+    // Initialize UI
+    updateStatsDisplay();
+    updateFavoriteCount();
+    updateSavedCount();
 });
