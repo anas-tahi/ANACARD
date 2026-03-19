@@ -16,6 +16,12 @@ let gameState = {
     difficulty: 'all',
     soundEnabled: true,
     gameMode: 'classic', // New: Game modes
+    partyMode: {
+        isActive: false,
+        partyCode: null,
+        isHost: false,
+        players: []
+    },
     stats: {
         cardsDrawn: 0,
         cardsSaved: 0,
@@ -843,9 +849,7 @@ function showPage(pageId) {
     document.querySelectorAll('.page').forEach(page => {
         page.classList.remove('active');
     });
-    setTimeout(() => {
-        document.getElementById(pageId).classList.add('active');
-    }, 100);
+    document.getElementById(pageId).classList.add('active');
 }
 
 function showLandingPage() {
