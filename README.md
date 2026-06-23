@@ -21,17 +21,10 @@ ANACARD turns awkward silences into memorable moments. Pick a deck, draw a card,
 
 ## ✨ Features
 
-- 🃏 **5 Themed Decks** — Conversation Starters, Fun Dares, Would You Rather, Deep Questions, Party Games
+- 🃏 **5 Themed Decks** — Conversation Starters, Dares, Would You Rather, Deep Questions, Party Games
 - 🎨 Modern warm UI — clean, responsive, mobile-friendly
 - ⚡ No account needed — just open and play
-- ☁️ Live deployment on Render
-
-## 🛠️ Tech Stack
-
-| Layer | Tech |
-|---|---|
-| Frontend | Vanilla JS, HTML5, CSS3 |
-| Deployment | Render |
+- ☁️ Live on Render
 
 ## 🚀 Run Locally
 
